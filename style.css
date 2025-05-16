@@ -27,6 +27,36 @@ h2 {
   text-shadow: 2px 2px 4px black;
 }
 
+#game-info {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  color: white;
+  font-family: sans-serif;
+}
+
+#connect-wallet {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#leaderboard {
+  margin-top: 20px;
+}
+
+#leaderboard table {
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#leaderboard th, #leaderboard td {
+  border: 1px solid white;
+  padding: 5px;
+}
+
 .duck {
   position: absolute;
   left: -150px;
