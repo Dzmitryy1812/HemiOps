@@ -33,6 +33,7 @@ h2 {
   left: 10px;
   color: white;
   font-family: sans-serif;
+  z-index: 20; /* Чтобы интерфейс был выше коалы */
 }
 
 #connect-wallet {
@@ -72,29 +73,32 @@ h2 {
   cursor: crosshair;
   transition: all 0.6s;
   background: no-repeat center url(hemi.png);
-  background-size: cover;
+  background-size: contain; /* Изображение не растягивается */
+  width: 100px; /* Фиксированный размер */
+  height: 100px; /* Фиксированный размер */
 }
 
 .duck a:after {
   content: "";
   display: block;
-  padding-bottom: 100%;
+  padding-bottom: 0; /* Убираем, так как задали фиксированный размер */
 }
 
-@for $i from 1 through 5 {
-  .duck:nth-child(#{$i}) {    
-    top: percentage(random(60)/100); 
-    animation: fly random(10)+6s random(200)/10+s linear infinite;
-  }
-  .duck:nth-child(#{$i}) a { 
-    width: random(100) + 50 +px;
-    animation: float random(20)/10+1.5+s infinite cubic-bezier(.58,.14,.46,.92);
-  }
-}
+/* Вручную задаём анимации для каждой коалы */
+.duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
+.duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
+.duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
+.duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
+.duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
+.duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
 
 @keyframes fly {
   0% { transform: translateX(0px); }
-  100% { transform: translateX(100%); }
+  100% { transform: translateX(100vw); } /* Движение через весь экран */
 }
 
 @keyframes float {
