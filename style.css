@@ -11,8 +11,15 @@ body {
   overflow: hidden;
 }
 
+body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
+body.level-2 { background: linear-gradient(#ff4500, #ff6347); }
+body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
+body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
+body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
+
 body:active .duck:active {
-  box-shadow: orange 0px 0px 0px 3000px;
+  box-shadow: 0 0 20px 10px rgba(255, 165, 0, 0.5);
+  transition: box-shadow 0.3s;
 }
 
 h2 {
@@ -36,12 +43,17 @@ h2 {
   z-index: 20;
 }
 
-#connect-wallet {
+#connect-wallet, #refresh-leaderboard {
   background: #333;
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#connect-wallet:hover, #refresh-leaderboard:hover {
+  background: #555;
 }
 
 #leaderboard {
@@ -51,6 +63,7 @@ h2 {
 #leaderboard table {
   border-collapse: collapse;
   background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
 }
 
 #leaderboard th, #leaderboard td {
@@ -73,26 +86,17 @@ h2 {
   display: block;
   cursor: crosshair;
   transition: all 0.6s;
-  background-size: cover; /* Покрывает контейнер, обрезая минимально */
-  background-position: center; /* Центрирует изображение */
-  background-repeat: no-repeat;
   width: 100px;
   height: 100px;
   animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
 }
 
-.duck a:after {
-  content: "";
-  display: block;
-  padding-bottom: 0;
+.duck a img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
-
-/* Разные изображения для каждой коалы */
-.duck#duck1 a { background-image: url(target1.png); }
-.duck#duck2 a { background-image: url(target2.png); }
-.duck#duck3 a { background-image: url(target3.png); }
-.duck#duck4 a { background-image: url(target4.png); }
-.duck#duck5 a { background-image: url(target5.png); }
 
 .duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
 .duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
@@ -118,4 +122,10 @@ h2 {
 
 .duck.hidden {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .duck a { width: 60px; height: 60px; }
+  #game-info { top: 10px; font-size: 12px; }
+  #leaderboard table { font-size: 10px; }
 }
