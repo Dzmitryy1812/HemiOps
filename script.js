@@ -1,62 +1,41 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Страница загружена:', new Date().toISOString());
     let score = 0;
     let level = 1;
     let walletAddress = null;
     let playerName = 'Игрок 1';
     let contract = null;
+    let isUserInitiated = false; // Флаг для пользовательских действий
 
     // Конфигурация сети Hemi
     const HEMI_CHAIN_ID = '0xa7cf'; // 43111 в шестнадцатеричном формате
     const HEMI_NETWORK_PARAMS = {
         chainId: '0xa7cf',
         chainName: 'Hemi',
-        <span style="color: red;">rpcUrls: ['https://rpc.hemi.network'], // Проверить: замените на актуальный RPC URL</span>
+        rpcUrls: ['https://rpc.hemi.network'], // Проверить: замените на актуальный RPC URL
         nativeCurrency: {
             name: 'Hemi',
             symbol: 'ETH',
             decimals: 18,
         },
-        <span style="color: red;">blockExplorerUrls: ['https://explorer.hemi.xyz'], // Проверить: замените на актуальный URL</span>
+        blockExplorerUrls: ['https://explorer.hemi.xyz/'], // Проверить: замените на актуальный URL
     };
     const contractAddress = '0xa523082CfaC400c6913E71A54365E7aBda30fE75';
     const contractABI = [
         {
             "anonymous": false,
             "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "playerAddress",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "score",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "level",
-                    "type": "uint256"
-                }
+                {"indexed": true, "internalType": "address", "name": "playerAddress", "type": "address"},
+                {"indexed": false, "internalType": "uint256", "name": "score", "type": "uint256"},
+                {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"}
             ],
             "name": "PlayerUpdated",
             "type": "event"
         },
         {
             "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "_score",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "_level",
-                    "type": "uint256"
-                }
+                {"internalType": "uint256", "name": "_score", "type": "uint256"},
+                {"internalType": "uint256", "name": "_level", "type": "uint256"}
             ],
             "name": "updatePlayer",
             "outputs": [],
@@ -69,26 +48,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             "outputs": [
                 {
                     "components": [
-                        {
-                            "internalType": "address",
-                            "name": "playerAddress",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "score",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "level",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "lastUpdated",
-                            "type": "uint256"
-                        }
+                        {"internalType": "address", "name": "playerAddress", "type": "address"},
+                        {"internalType": "uint256", "name": "score", "type": "uint256"},
+                        {"internalType": "uint256", "name": "level", "type": "uint256"},
+                        {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"}
                     ],
                     "internalType": "struct Leaderboard.Player[]",
                     "name": "",
@@ -99,37 +62,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "_player",
-                    "type": "address"
-                }
-            ],
+            "inputs": [{"internalType": "address", "name": "_player", "type": "address"}],
             "name": "getPlayer",
             "outputs": [
                 {
                     "components": [
-                        {
-                            "internalType": "address",
-                            "name": "playerAddress",
-                            "type": "address"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "score",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "level",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "lastUpdated",
-                            "type": "uint256"
-                        }
+                        {"internalType": "address", "name": "playerAddress", "type": "address"},
+                        {"internalType": "uint256", "name": "score", "type": "uint256"},
+                        {"internalType": "uint256", "name": "level", "type": "uint256"},
+                        {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"}
                     ],
                     "internalType": "struct Leaderboard.Player",
                     "name": "",
@@ -142,65 +83,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             "inputs": [],
             "name": "getPlayerCount",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
+            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
             "stateMutability": "view",
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
+            "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
             "name": "playerAddresses",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
+            "outputs": [{"internalType": "address", "name": "", "type": "address"}],
             "stateMutability": "view",
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
+            "inputs": [{"internalType": "address", "name": "", "type": "address"}],
             "name": "players",
             "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "playerAddress",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "score",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "level",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "lastUpdated",
-                    "type": "uint256"
-                }
+                {"internalType": "address", "name": "playerAddress", "type": "address"},
+                {"internalType": "uint256", "name": "score", "type": "uint256"},
+                {"internalType": "uint256", "name": "level", "type": "uint256"},
+                {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"}
             ],
             "stateMutability": "view",
             "type": "function"
@@ -211,6 +112,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function checkNetwork() {
         console.log('Вызов checkNetwork:', new Date().toISOString());
         console.trace('Стек вызовов checkNetwork');
+        if (!isUserInitiated) {
+            console.log('checkNetwork заблокирован: не инициировано пользователем');
+            return false;
+        }
         if (typeof window.ethereum !== 'undefined') {
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
             console.log('Текущий chainId:', chainId);
@@ -236,13 +141,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         } catch (addError) {
                             console.error('Ошибка добавления сети Hemi:', addError);
                             console.log('Не удалось добавить сеть Hemi. Пожалуйста, добавьте сеть вручную в MetaMask с Chain ID: 43111.');
-                            // alert('Не удалось добавить сеть Hemi. Пожалуйста, добавьте сеть вручную в MetaMask с Chain ID: 43111.');
                             return false;
                         }
                     } else {
                         console.error('Ошибка переключения сети:', error);
                         console.log('Пожалуйста, переключитесь на сеть Hemi (Chain ID: 43111) в MetaMask.');
-                        // alert('Пожалуйста, переключитесь на сеть Hemi (Chain ID: 43111) в MetaMask.');
                         return false;
                     }
                 }
@@ -250,7 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return true;
         } else {
             console.log('MetaMask не установлен');
-            // alert('Установите MetaMask для проверки сети!');
             return false;
         }
     }
@@ -264,15 +166,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Мониторинг событий MetaMask
-    if (window.ethereum) {
-        window.ethereum.on('chainChanged', (chainId) => {
-            console.log('MetaMask: смена сети на:', chainId);
-        });
-        window.ethereum.on('accountsChanged', (accounts) => {
-            console.log('MetaMask: смена аккаунта:', accounts);
-        });
+    // Проверка состояния MetaMask при загрузке
+    async function checkMetaMaskStatus() {
+        if (window.ethereum) {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            console.log('MetaMask: подключённые аккаунты при загрузке:', accounts);
+            window.ethereum.on('chainChanged', (chainId) => {
+                console.log('MetaMask: смена сети на:', chainId);
+            });
+            window.ethereum.on('accountsChanged', (accounts) => {
+                console.log('MetaMask: смена аккаунта:', accounts);
+            });
+        } else {
+            console.log('MetaMask не установлен при загрузке');
+        }
     }
+    checkMetaMaskStatus();
 
     // Загрузка Web3.js
     if (!window.Web3) {
@@ -280,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
         script.onerror = () => {
             console.error('Ошибка загрузки Web3.js');
-            console.log('Не удалось загрузить необходимые библиотеки. Пожалуйста, попробуйте позже.');
+            console.log('Не удалось загрузить необходимые библиотеки.');
         };
         document.head.appendChild(script);
     }
@@ -330,6 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
             console.log('Клик по кнопке Connect Wallet!');
+            isUserInitiated = true; // Разрешаем вызов checkNetwork
             if (await checkNetwork()) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -342,9 +252,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } catch (error) {
                     console.error('Ошибка подключения кошелька:', error);
                     console.log('Не удалось подключить кошелёк. Проверьте MetaMask.');
-                    // alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
                 }
             }
+            isUserInitiated = false; // Сбрасываем флаг
         });
     }
 
@@ -372,7 +282,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Обновление лидерборда по кнопке
     const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
-    if (refreshLeaderboardButton grave; {
+    if (refreshLeaderboardButton) {
         refreshLeaderboardButton.addEventListener('click', updateLeaderboard);
     }
 });
