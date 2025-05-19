@@ -70,6 +70,12 @@ h2 {
 #leaderboard th, #leaderboard td {
   border: 1px solid white;
   padding: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+#leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
+  min-width: 120px; /* Для столбца "Последнее обновление" */
 }
 
 .duck {
@@ -81,7 +87,7 @@ h2 {
   z-index: 10;
   transform: translateZ(0);
   animation: fly 8s linear infinite;
-  pointer-events: auto; /* Убедимся, что элемент принимает клики */
+  pointer-events: auto;
 }
 
 .duck a {
@@ -91,7 +97,7 @@ h2 {
   width: 100px;
   height: 100px;
   animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
-  pointer-events: auto; /* Убедимся, что ссылка принимает клики */
+  pointer-events: auto;
 }
 
 .duck a img {
