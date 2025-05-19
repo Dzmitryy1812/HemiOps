@@ -153,13 +153,4 @@ Adding fallback RPC URLs for increased reliability.
 Local Web3.js copy to eliminate CDN dependency.
 Adding sound effects and more animations to enhance UX.
 
-License
-MIT License. See the LICENSE file (if included).
-Contact
 
-GitHub: your-username
-Email: your-email@example.com
-Website: https://hemiops.netlify.app/
-
-
-Built as a Web3 builder to demonstrate skills in developing decentralized applications.
