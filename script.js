@@ -215,21 +215,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Загрузка Web3.js
     if (!window.Web3) {
-        console.log('Загрузка Web3.js...');
+        console.log('Loading Web3.js...');
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
         script.onload = () => {
             if (window.Web3 && window.Web3.version && window.Web3.version.startsWith('1.')) {
-                console.log('Web3.js загружен, версия:', window.Web3.version);
-                showNotification('Web3.js успешно загружен', 'success');
+                console.log('Web3.js loaded, version:', window.Web3.version);
+                showNotification('Web3.js loaded successfully', 'success');
             } else {
                 console.error('Несовместимая версия Web3.js');
-                showNotification('Ошибка: несовместимая версия Web3.js', 'error');
+                showNotification('Incompatible Web3.js version', 'error');
             }
         };
         script.onerror = () => {
-            console.error('Ошибка загрузки Web3.js');
-            showNotification('Не удалось загрузить Web3.js', 'error');
+            console.error('Error loading Web3.js');
+            showNotification('Failed to load Web3.js', 'error');
         };
         document.head.appendChild(script);
     } else {
@@ -268,16 +268,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         console.log('Отправка запроса к смарт-контракту: updatePlayer', { score, level, from: walletAddress });
                         const result = await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
-                        console.log('Лидерборд обновлён в смарт-контракте:', result);
-                        showNotification('Данные игрока обновлены в блокчейне', 'success');
+                        console.log('Leaderboard updated in smart contract:', result);
+                        showNotification('Player data updated on blockchain', 'success');
                         await updateLeaderboard();
                     } catch (error) {
-                        console.error('Ошибка обновления смарт-контракта:', error);
-                        showNotification('Ошибка обновления данных в блокчейне', 'error');
+                        console.error('Smart contract update error:', error);
+                        showNotification('Error updating data in blockchain', 'error');
                     }
                 } else {
-                    console.log('Запрос к смарт-контракту не выполнен: contract или walletAddress отсутствуют');
-                    showNotification('Не удалось обновить данные: кошелёк или контракт не подключены', 'error');
+                    console.log('Smart contract request failed: contract or walletAddress missing');
+                    showNotification('Failed to update data: wallet or contract not connected', 'error');
                 }
             }
         });
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const connectWalletButton = document.getElementById('connect-wallet');
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
-            console.log('Клик по кнопке Connect Wallet!');
+            console.log('Click on the Connect Wallet button!');
             if (isMetaMaskProvider()) {
                 try {
                     await switchToHemiNetwork();
@@ -295,17 +295,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                     walletAddress = accounts[0];
                     playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
                     document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                    console.log('Кошелёк подключён:', walletAddress);
-                    showNotification('Кошелёк успешно подключён', 'success');
+                    console.log('Wallet connected:', walletAddress);
+                    showNotification('Wallet successfully connected', 'success');
                     await initContract();
                     await updateLeaderboard();
                 } catch (error) {
-                    console.error('Ошибка подключения кошелька:', error);
-                    showNotification('Ошибка подключения кошелька. Проверьте MetaMask.', 'error');
+                    console.error('Wallet connection error:', error);
+                    showNotification('Wallet connection error. Check MetaMask.', 'error');
                 }
             } else {
-                console.log('MetaMask не установлен');
-                showNotification('Установите MetaMask для подключения кошелька!', 'error');
+                console.log('MetaMask is not installed');
+                showNotification('Install MetaMask to connect your wallet!', 'error');
             }
         });
     }
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateLeaderboard() {
         if (contract) {
             try {
-                console.log('Обновление лидерборда...');
+                console.log('Leaderboard update...');
                 const leaderboardData = await contract.methods.getLeaderboard().call();
                 const tbody = document.querySelector('#leaderboard tbody');
                 if (tbody) {
@@ -327,15 +327,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     });
                     console.log('Лидерборд обновлён:', leaderboardData);
-                    showNotification('Лидерборд успешно обновлён', 'success');
+                    showNotification('Leaderboard successfully updated', 'success');
                 }
             } catch (error) {
-                console.error('Ошибка загрузки лидерборда:', error);
-                showNotification('Ошибка загрузки лидерборда', 'error');
+                console.error('Error loading leaderboard:', error);
+                showNotification('Error loading leaderboard', 'error');
             }
         } else {
-            console.log('Лидерборд не обновлён: контракт не инициализирован');
-            showNotification('Лидерборд не обновлён: контракт не подключён', 'error');
+            console.log('Leaderboard not updated: contract not initialized');
+            showNotification('Leaderboard not updated: contract not connected', 'error');
         }
     }
 
