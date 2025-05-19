@@ -145,18 +145,6 @@ Wallet: MetaMask
 Styling: CSS animations, responsive layout
 Hosting: Netlify
 
-Project Structure
-hemiops/
-├── index.html          # Main HTML file
-├── style.css           # Styles and animations
-├── script.js           # Game logic and Web3 integration
-├── target1.png         # Target #1
-├── target2.png         # Target #2
-├── target3.png         # Target #3
-├── target4.png         # Target #4
-├── target5.png         # Target #5
-├── target_golden.png   # Golden target
-└── README.md           # Project description
 
 Potential Improvements
 
