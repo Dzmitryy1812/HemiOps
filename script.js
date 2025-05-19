@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let level = 1;
     let walletAddress = null;
+    let playerName = 'Игрок 1'; // По умолчанию, если кошелёк не подключён
 
     // Проверяем, найдены ли элементы
     const ducks = document.querySelectorAll('.duck a');
@@ -38,19 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Подключение кошелька через MetaMask
     document.getElementById('connect-wallet').addEventListener('click', async () => {
-        if (typeof window.ethereum !== 'undefined' && typeof ethers !== 'undefined') {
+        if (typeof window.ethereum !== 'undefined') {
             try {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const accounts = await provider.send('eth_requestAccounts', []);
+                // Запрашиваем доступ к аккаунту
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 walletAddress = accounts[0];
-                document.getElementById('wallet').textContent = `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
+                console.log('Кошелёк подключён:', walletAddress);
             } catch (error) {
                 console.error('Ошибка подключения кошелька:', error);
-                alert('Не удалось подключить кошелек. Проверьте MetaMask или загрузку ethers.js.');
+                alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
             }
         } else {
-            console.error('ethers.js не загружен или MetaMask не установлен');
-            alert('Установите MetaMask и убедитесь, что ethers.js загружен!');
+            console.error('MetaMask не установлен');
+            alert('Установите MetaMask для подключения кошелька!');
         }
     });
 
@@ -58,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('refresh-leaderboard').addEventListener('click', () => {
         // Пример статического лидерборда (замените на API при необходимости)
         const leaderboard = [
-            { player: walletAddress ? `${walletAddress.slice(0, 6)}...` : 'Игрок 1', score: 150, level: 2 },
+            { player: playerName, score: score, level: level },
             { player: 'Игрок 2', score: 100, level: 1 },
             { player: 'Игрок 3', score: 50, level: 1 }
         ];
