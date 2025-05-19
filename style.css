@@ -9,6 +9,7 @@ body {
   background: linear-gradient(#ff6200, #ff8c00);
   cursor: crosshair;
   overflow: hidden;
+  transition: background 0.5s;
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -17,7 +18,7 @@ body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
 body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
 body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
 
-body:active .duck:active {
+.duck:active {
   box-shadow: 0 0 20px 10px rgba(255, 165, 0, 0.5);
   transition: box-shadow 0.3s;
 }
@@ -98,6 +99,13 @@ h2 {
   object-position: center;
 }
 
+/* Выделение золотой утки */
+#duck5 a img {
+  border: 2px solid gold;
+  border-radius: 50%;
+  box-shadow: 0 0 10px gold;
+}
+
 .duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
 .duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
 .duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
@@ -122,6 +130,12 @@ h2 {
 
 .duck.hidden {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .duck a { width: 80px; height: 80px; }
+  #game-info { top: 20px; font-size: 14px; }
+  #leaderboard table { font-size: 12px; }
 }
 
 @media (max-width: 600px) {
