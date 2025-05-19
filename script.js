@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Страница загружена:', new Date().toISOString());
     let score = 0;
     let level = 1;
-    let walletAddress = let walletAddress = null;
+    let walletAddress = null;
     let playerName = 'Игрок 1';
     let contract = null;
 
@@ -109,12 +109,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Инициализация контракта
     async function initContract() {
-        if (typeof window.ethereum !== 'undefined') {
-            const provider = new window.Web3(window.ethereum);
-            contract = new provider.eth.Contract(contractABI, contractAddress);
-            console.log('Контракт инициализирован');
+        console.log('Инициализация контракта:', new Date().toISOString());
+        if (typeof window.ethereum !== 'undefined' && window.Web3) {
+            try {
+                const provider = new window.Web3(window.ethereum);
+                contract = new provider.eth.Contract(contractABI, contractAddress);
+                console.log('Контракт успешно инициализирован:', contract);
+            } catch (error) {
+                console.error('Ошибка инициализации контракта:', error);
+            }
         } else {
-            console.log('MetaMask не установлен, контракт не инициализирован');
+            console.log('MetaMask или Web3.js не доступны, контракт не инициализирован');
         }
     }
 
@@ -128,6 +133,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             window.ethereum.on('accountsChanged', (accounts) => {
                 console.log('MetaMask: смена аккаунта:', accounts);
+                if (accounts.length > 0) {
+                    walletAddress = accounts[0];
+                    playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                    document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
+                    console.log('Кошелёк обновлён:', walletAddress);
+                } else {
+                    walletAddress = null;
+                    document.getElementById('wallet').textContent = `Wallet: Not connected`;
+                    console.log('Кошелёк отключён');
+                }
             });
         } else {
             console.log('MetaMask не установлен при загрузке');
@@ -137,13 +152,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Загрузка Web3.js
     if (!window.Web3) {
+        console.log('Загрузка Web3.js...');
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
+        script.onload = () => console.log('Web3.js загружен');
         script.onerror = () => {
             console.error('Ошибка загрузки Web3.js');
             console.log('Не удалось загрузить необходимые библиотеки.');
         };
         document.head.appendChild(script);
+    } else {
+        console.log('Web3.js уже доступен');
     }
 
     // Проверяем, найдены ли элементы
@@ -173,14 +192,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
 
+                console.log('Прохождение уровня: contract=', contract, 'walletAddress=', walletAddress);
                 if (contract && walletAddress) {
                     try {
-                        await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
-                        console.log('Лидерборд обновлён в смарт-контракте');
+                        console.log('Отправка запроса к смарт-контракту: updatePlayer', { score, level, from: walletAddress });
+                        const result = await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
+                        console.log('Лидерборд обновлён в смарт-контракте:', result);
                         await updateLeaderboard();
                     } catch (error) {
-                        console.error('Ошибка обновления лидерборда:', error);
+                        console.error('Ошибка обновления смарт-контракта:', error);
                     }
+                } else {
+                    console.log('Запрос к смарт-контракту не выполнен: contract или walletAddress отсутствуют');
                 }
             }
         });
@@ -216,6 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateLeaderboard() {
         if (contract) {
             try {
+                console.log('Обновление лидерборда...');
                 const leaderboardData = await contract.methods.getLeaderboard().call();
                 const tbody = document.querySelector('#leaderboard tbody');
                 if (tbody) {
@@ -227,10 +251,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                             tbody.innerHTML += `<tr><td>${displayName}</td><td>${player.score}</td><td>${player.level}</td><td>${lastUpdated}</td></tr>`;
                         }
                     });
+                    console.log('Лидерборд обновлён:', leaderboardData);
                 }
             } catch (error) {
                 console.error('Ошибка загрузки лидерборда:', error);
             }
+        } else {
+            console.log('Лидерборд не обновлён: контракт не инициализирован');
         }
     }
 
