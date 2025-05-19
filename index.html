@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,13 @@
 <body class="level-1">
     <h2>HemiOps</h2>
     <div id="game-info">
-        <button type="button" id="connect-wallet">Connect Wallet</button>
+        <button id="connect-wallet">Connect Wallet</button>
         <div id="wallet">Wallet: Not connected</div>
         <div id="score">Score: 0</div>
         <div id="level">Level: 1</div>
-        <button type="button" id="refresh-leaderboard">Update</button>
+        <div id="notification"></div>
         <div id="leaderboard">
+            <button id="refresh-leaderboard">Update</button>
             <table>
                 <thead>
                     <tr>
@@ -28,11 +29,13 @@
             </table>
         </div>
     </div>
-    <div class="duck" id="duck1"><a><img src="target1.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck2"><a><img src="target2.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck3"><a><img src="target3.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck4"><a><img src="target4.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck5"><a><img src="target_golden.png" alt="target_golden.png"></a></div>
+
+    <div class="duck" id="duck1"><a><img src="duck.png"></a></div>
+    <div class="duck" id="duck2"><a><img src="duck.png"></a></div>
+    <div class="duck" id="duck3"><a><img src="duck.png"></a></div>
+    <div class="duck" id="duck4"><a><img src="duck.png"></a></div>
+    <div class="duck" id="duck5"><a><img src="golden-duck.png"></a></div>
+
     <script src="script.js"></script>
 </body>
 </html>
