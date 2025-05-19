@@ -57,6 +57,23 @@ h2 {
   background: #555;
 }
 
+#notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    font-family: sans-serif;
+}
+
+#notification.success { background: rgba(0, 128, 0, 0.8); }
+#notification.error { background: rgba(255, 0, 0, 0.8); }
+#notification.info { background: rgba(0, 0, 255, 0.8); }
+
 #leaderboard {
   margin-top: 20px;
 }
