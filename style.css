@@ -81,6 +81,7 @@ h2 {
   z-index: 10;
   transform: translateZ(0);
   animation: fly 8s linear infinite;
+  pointer-events: auto; /* Убедимся, что элемент принимает клики */
 }
 
 .duck a {
@@ -90,6 +91,7 @@ h2 {
   width: 100px;
   height: 100px;
   animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
+  pointer-events: auto; /* Убедимся, что ссылка принимает клики */
 }
 
 .duck a img {
