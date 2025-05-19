@@ -1,8 +1,85 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     let score = 0;
     let level = 1;
     let walletAddress = null;
-    let playerName = 'Игрок 1'; // По умолчанию, если кошелёк не подключён
+    let playerName = 'Игрок 1';
+    let contract = null;
+
+    // Конфигурация сети Hemi
+    const HEMI_CHAIN_ID = '0xa7cf'; // 43111 в шестнадцатеричном формате
+    const contractAddress = '0xYourContractAddressHere'; // Замените на адрес вашего контракта
+    const contractABI = [
+        {
+            "inputs": [
+                {"name": "_score", "type": "uint256"},
+                {"name": "_level", "type": "uint256"}
+            ],
+            "name": "updatePlayer",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getLeaderboard",
+            "outputs": [
+                {
+                    "components": [
+                        {"name": "playerAddress", "type": "address"},
+                        {"name": "score", "type": "uint256"},
+                        {"name": "level", "type": "uint256"},
+                        {"name": "lastUpdated", "type": "uint256"}
+                    ],
+                    "type": "tuple[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+
+    // Проверка сети Hemi
+    async function checkNetwork() {
+        if (typeof window.ethereum !== 'undefined') {
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chainId !== HEMI_CHAIN_ID) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: HEMI_CHAIN_ID }],
+                    });
+                } catch (error) {
+                    console.error('Ошибка переключения сети:', error);
+                    alert('Пожалуйста, переключитесь на сеть Hemi (Chain ID: 43111) в MetaMask.');
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            alert('Установите MetaMask для проверки сети!');
+            return false;
+        }
+    }
+
+    // Инициализация контракта
+    async function initContract() {
+        if (await checkNetwork() && typeof window.ethereum !== 'undefined') {
+            const provider = new window.Web3(window.ethereum);
+            contract = new provider.eth.Contract(contractABI, contractAddress);
+            console.log('Контракт инициализирован');
+        }
+    }
+
+    // Загрузка Web3.js
+    if (!window.Web3) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
+        script.onload = initContract;
+        script.onerror = () => console.error('Ошибка загрузки Web3.js');
+        document.head.appendChild(script);
+    } else {
+        await initContract();
+    }
 
     // Проверяем, найдены ли элементы
     const ducks = document.querySelectorAll('.duck a');
@@ -10,17 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обработка кликов по "уткам"
     ducks.forEach(duck => {
-        duck.addEventListener('click', (event) => {
+        duck.addEventListener('click', async (event) => {
             console.log('Клик по утке:', duck.parentElement.id);
             const targetDuck = event.currentTarget.parentElement;
-            // Проверяем, является ли это "золотой" уткой (duck5)
             const isGolden = targetDuck.id === 'duck5';
-            const points = isGolden ? 50 : 10; // 50 очков за золотую, 10 за обычную
+            const points = isGolden ? 50 : 10;
             score += points;
             document.getElementById('score').textContent = `Score: ${score}`;
             targetDuck.classList.add('hidden');
 
-            // Показать только эту "утку" снова через 2 секунды
             setTimeout(() => {
                 targetDuck.classList.remove('hidden');
             }, 2000);
@@ -28,11 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // Смена уровня при достижении 100 очков
             if (score >= 100) {
                 level++;
-                if (level > 5) level = 1; // Циклический переход
+                if (level > 5) level = 1;
                 document.getElementById('level').textContent = `Level: ${level}`;
                 document.body.className = `level-${level}`;
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
+
+                // Обновление лидерборда в смарт-контракте
+                if (contract && walletAddress) {
+                    try {
+                        await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
+                        console.log('Лидерборд обновлён в смарт-контракте');
+                        await updateLeaderboard();
+                    } catch (error) {
+                        console.error('Ошибка обновления лидерборда:', error);
+                    }
+                }
             }
         });
     });
@@ -43,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         connectWalletButton.addEventListener('click', async () => {
             if (typeof window.ethereum !== 'undefined') {
                 try {
-                    // Запрашиваем доступ к аккаунту
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     walletAddress = accounts[0];
                     playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
@@ -58,31 +143,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Установите MetaMask для подключения кошелька!');
             }
         });
-    } else {
-        console.error('Кнопка Connect Wallet не найдена');
     }
 
     // Обновление лидерборда
+    async function updateLeaderboard() {
+        if (contract) {
+            try {
+                const leaderboardData = await contract.methods.getLeaderboard().call();
+                const tbody = document.querySelector('#leaderboard tbody');
+                if (tbody) {
+                    tbody.innerHTML = '';
+                    leaderboardData.forEach(player => {
+                        if (player.playerAddress !== '0x0000000000000000000000000000000000000000') {
+                            const displayName = `${player.playerAddress.slice(0, 6)}...${player.playerAddress.slice(-4)}`;
+                            const lastUpdated = new Date(player.lastUpdated * 1000).toLocaleString();
+                            tbody.innerHTML += `<tr><td>${displayName}</td><td>${player.score}</td><td>${player.level}</td><td>${lastUpdated}</td></tr>`;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки лидерборда:', error);
+            }
+        }
+    }
+
+    // Инициализация лидерборда при загрузке
+    updateLeaderboard();
+
+    // Обновление лидерборда по кнопке
     const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
     if (refreshLeaderboardButton) {
-        refreshLeaderboardButton.addEventListener('click', () => {
-            // Пример статического лидерборда (замените на API при необходимости)
-            const leaderboard = [
-                { player: playerName, score: score, level: level },
-                { player: 'Игрок 2', score: 100, level: 1 },
-                { player: 'Игрок 3', score: 50, level: 1 }
-            ];
-            const tbody = document.querySelector('#leaderboard tbody');
-            if (tbody) {
-                tbody.innerHTML = '';
-                leaderboard.forEach(row => {
-                    tbody.innerHTML += `<tr><td>${row.player}</td><td>${row.score}</td><td>${row.level}</td></tr>`;
-                });
-            } else {
-                console.error('Таблица лидерборда не найдена');
-            }
-        });
-    } else {
-        console.error('Кнопка Обновить не найдена');
+        refreshLeaderboardButton.addEventListener('click', updateLeaderboard);
     }
 });
