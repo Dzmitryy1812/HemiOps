@@ -2,12 +2,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Страница загружена:', new Date().toISOString());
     let score = 0;
     let level = 1;
-    let walletAddress = null;
+    let walletAddress = let walletAddress = null;
     let playerName = 'Игрок 1';
     let contract = null;
-    let isUserInitiated = false; // Флаг для пользовательских действий
 
-    // Конфигурация сети Hemi
+    // Конфигурация сети Hemi (оставляем для возможного возврата проверки)
     const HEMI_CHAIN_ID = '0xa7cf'; // 43111 в шестнадцатеричном формате
     const HEMI_NETWORK_PARAMS = {
         chainId: '0xa7cf',
@@ -108,61 +107,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     ];
 
-    // Проверка сети Hemi
-    async function checkNetwork() {
-        console.log('Вызов checkNetwork:', new Date().toISOString());
-        console.trace('Стек вызовов checkNetwork');
-        if (!isUserInitiated) {
-            console.log('checkNetwork заблокирован: не инициировано пользователем');
-            return false;
-        }
-        if (typeof window.ethereum !== 'undefined') {
-            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            console.log('Текущий chainId:', chainId);
-            if (chainId !== HEMI_CHAIN_ID) {
-                console.log('Переключение на Hemi с chainId:', HEMI_CHAIN_ID);
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: HEMI_CHAIN_ID }],
-                    });
-                } catch (error) {
-                    if (error.code === 4902) {
-                        try {
-                            console.log('Добавление сети Hemi:', HEMI_NETWORK_PARAMS);
-                            await window.ethereum.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [HEMI_NETWORK_PARAMS],
-                            });
-                            await window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: HEMI_CHAIN_ID }],
-                            });
-                        } catch (addError) {
-                            console.error('Ошибка добавления сети Hemi:', addError);
-                            console.log('Не удалось добавить сеть Hemi. Пожалуйста, добавьте сеть вручную в MetaMask с Chain ID: 43111.');
-                            return false;
-                        }
-                    } else {
-                        console.error('Ошибка переключения сети:', error);
-                        console.log('Пожалуйста, переключитесь на сеть Hemi (Chain ID: 43111) в MetaMask.');
-                        return false;
-                    }
-                }
-            }
-            return true;
-        } else {
-            console.log('MetaMask не установлен');
-            return false;
-        }
-    }
-
     // Инициализация контракта
     async function initContract() {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new window.Web3(window.ethereum);
             contract = new provider.eth.Contract(contractABI, contractAddress);
             console.log('Контракт инициализирован');
+        } else {
+            console.log('MetaMask не установлен, контракт не инициализирован');
         }
     }
 
@@ -239,8 +191,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
             console.log('Клик по кнопке Connect Wallet!');
-            isUserInitiated = true; // Разрешаем вызов checkNetwork
-            if (await checkNetwork()) {
+            if (typeof window.ethereum !== 'undefined') {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     walletAddress = accounts[0];
@@ -252,9 +203,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } catch (error) {
                     console.error('Ошибка подключения кошелька:', error);
                     console.log('Не удалось подключить кошелёк. Проверьте MetaMask.');
+                    // alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
                 }
+            } else {
+                console.log('MetaMask не установлен');
+                // alert('Установите MetaMask для подключения кошелька!');
             }
-            isUserInitiated = false; // Сбрасываем флаг
         });
     }
 
