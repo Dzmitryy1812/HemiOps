@@ -4,17 +4,18 @@ let walletAddress = null;
 
 // Обработка кликов по "уткам"
 document.querySelectorAll('.duck a').forEach(duck => {
-    duck.addEventListener('click', () => {
+    duck.addEventListener('click', (event) => {
+        const targetDuck = event.currentTarget.parentElement;
         // Проверяем, является ли это "золотой" уткой (duck5)
-        const isGolden = duck.parentElement.id === 'duck5';
+        const isGolden = targetDuck.id === 'duck5';
         const points = isGolden ? 50 : 10; // 50 очков за золотую, 10 за обычную
         score += points;
         document.getElementById('score').textContent = `Score: ${score}`;
-        duck.parentElement.classList.add('hidden');
+        targetDuck.classList.add('hidden');
 
-        // Показать "утку" снова через 2 секунды
+        // Показать только эту "утку" снова через 2 секунды
         setTimeout(() => {
-            duck.parentElement.classList.remove('hidden');
+            targetDuck.classList.remove('hidden');
         }, 2000);
 
         // Смена уровня при достижении 100 очков
