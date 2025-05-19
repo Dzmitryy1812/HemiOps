@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let contract = null;
 
     // Конфигурация сети Hemi
-    const HEMI_CHAIN_ID = '0xa857'; // 43111 в шестнадцатеричном формате
+    const HEMI_CHAIN_ID = '0xa867 '; // 43111 в шестнадцатеричном формате
     const HEMI_NETWORK_PARAMS = {
-        chainId: '0xa857',
+        chainId: '0xa867 ',
         chainName: 'Hemi',
         rpcUrls: ['https://rpc.hemi.network/rpc'],
         nativeCurrency: {
