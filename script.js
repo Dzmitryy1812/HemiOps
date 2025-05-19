@@ -1,34 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Стреляй по HEMI!</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
-</head>
-<body>
-  <h2>Стреляй по HEMI!</h2>
-  <div id="game-info">
-    <button id="connect-wallet">Connect Wallet</button>
-    <p id="wallet-address">Wallet: Not connected</p>
-    <p id="score">Score: 0</p>
-    <p id="level">Level: 1</p>
-    <button id="refresh-leaderboard">Обновить</button>
-    <div id="leaderboard">
-      <h3>Лидерборд</h3>
-      <table>
-        <tr><th>Игрок</th><th>Очки</th><th>Уровень</th></tr>
-      </table>
-    </div>
-  </div>
-  <div class="range">
-    <div class="duck" id="duck1"><a href="#duck1"><img src="target1.png" alt="Target 1"></a></div>
-    <div class="duck" id="duck2"><a href="#duck2"><img src="target2.png" alt="Target 2"></a></div>
-    <div class="duck" id="duck3"><a href="#duck3"><img src="target3.png" alt="Target 3"></a></div>
-    <div class="duck" id="duck4"><a href="#duck4"><img src="target4.png" alt="Target 4"></a></div>
-    <div class="duck" id="duck5"><a href="#duck5"><img src="target5.png" alt="Target 5"></a></div>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>'n
+let score = 0;
+let level = 1;
+let walletAddress = null;
+
+// Обработка кликов по "уткам"
+document.querySelectorAll('.duck a').forEach(duck => {
+    duck.addEventListener('click', () => {
+        // Проверяем, является ли это "золотой" уткой (duck5)
+        const isGolden = duck.parentElement.id === 'duck5';
+        const points = isGolden ? 50 : 10; // 50 очков за золотую, 10 за обычную
+        score += points;
+        document.getElementById('score').textContent = `Score: ${score}`;
+        duck.parentElement.classList.add('hidden');
+
+        // Показать "утку" снова через 2 секунды
+        setTimeout(() => {
+            duck.parentElement.classList.remove('hidden');
+        }, 2000);
+
+        // Смена уровня при достижении 100 очков
+        if (score >= 100) {
+            level++;
+            if (level > 5) level = 1; // Циклический переход
+            document.getElementById('level').textContent = `Level: ${level}`;
+            document.body.className = `level-${level}`;
+            score = 0;
+            document.getElementById('score').textContent = `Score: ${score}`;
+        }
+    });
+});
+
+// Подключение кошелька через MetaMask
+document.getElementById('connect-wallet').addEventListener('click', async () => {
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const accounts = await provider.send('eth_requestAccounts', []);
+            walletAddress = accounts[0];
+            document.getElementById('wallet').textContent = `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+        } catch (error) {
+            console.error('Ошибка подключения кошелька:', error);
+            alert('Не удалось подключить кошелек. Проверьте MetaMask.');
+        }
+    } else {
+        alert('Установите MetaMask для подключения кошелька!');
+    }
+});
+
+// Обновление лидерборда
+document.getElementById('refresh-leaderboard').addEventListener('click', () => {
+    // Пример статического лидерборда (замените на API при необходимости)
+    const leaderboard = [
+        { player: walletAddress ? `${walletAddress.slice(0, 6)}...` : 'Игрок 1', score: 150, level: 2 },
+        { player: 'Игрок 2', score: 100, level: 1 },
+        { player: 'Игрок 3', score: 50, level: 1 }
+    ];
+    const tbody = document.querySelector('#leaderboard tbody');
+    tbody.innerHTML = '';
+    leaderboard.forEach(row => {
+        tbody.innerHTML += `<tr><td>${row.player}</td><td>${row.score}</td><td>${row.level}</td></tr>`;
+    });
+});
