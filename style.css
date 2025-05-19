@@ -73,7 +73,9 @@ h2 {
   display: block;
   cursor: crosshair;
   transition: all 0.6s;
-  background-size: 100% 100%; /* Изображение заполняет контейнер без обрезки */
+  background-size: cover; /* Покрывает контейнер, обрезая минимально */
+  background-position: center; /* Центрирует изображение */
+  background-repeat: no-repeat;
   width: 100px;
   height: 100px;
   animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
@@ -86,11 +88,11 @@ h2 {
 }
 
 /* Разные изображения для каждой коалы */
-.duck#duck1 a { background: no-repeat center url(target1.png); }
-.duck#duck2 a { background: no-repeat center url(target2.png); }
-.duck#duck3 a { background: no-repeat center url(target3.png); }
-.duck#duck4 a { background: no-repeat center url(target4.png); }
-.duck#duck5 a { background: no-repeat center url(target5.png); }
+.duck#duck1 a { background-image: url(target1.png); }
+.duck#duck2 a { background-image: url(target2.png); }
+.duck#duck3 a { background-image: url(target3.png); }
+.duck#duck4 a { background-image: url(target4.png); }
+.duck#duck5 a { background-image: url(target5.png); }
 
 .duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
 .duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
