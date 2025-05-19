@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Конфигурация сети Hemi
     const HEMI_CHAIN_ID = '0xa7cf'; // 43111 в шестнадцатеричном формате
-    const contractAddress = '0xYourContractAddressHere'; // Замените на адрес вашего контракта
+    const contractAddress = const contractAddress = '0xa523082CfaC400c6913E71A54365E7aBda30fE75'; // 
     const contractABI = [
         {
             "inputs": [
