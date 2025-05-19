@@ -152,5 +152,5 @@ Leaderboard caching to reduce RPC load.
 Adding fallback RPC URLs for increased reliability.
 Local Web3.js copy to eliminate CDN dependency.
 Adding sound effects and more animations to enhance UX.
-
+In search of a cool domain.
 
