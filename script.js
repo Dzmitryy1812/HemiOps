@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize contract
     async function initContract() {
-        console.log('Initializing contract:', new Date().toISOString());
+        console.log('Initializing contract for HemiOps:', new Date().toISOString());
         if (typeof window.ethereum !== 'undefined' && window.Web3) {
             try {
                 const provider = new window.Web3(window.ethereum);
@@ -167,12 +167,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Check for game elements
     const ducks = document.querySelectorAll('.duck a');
-    console.log('Ducks found:', ducks.length);
+    console.log('Targets found:', ducks.length);
 
-    // Handle duck clicks
+    // Handle target clicks
     ducks.forEach(duck => {
         duck.addEventListener('click', async (event) => {
-            console.log('Duck clicked:', duck.parentElement.id);
+            console.log('Target clicked:', duck.parentElement.id);
             const targetDuck = event.currentTarget.parentElement;
             const isGolden = targetDuck.id === 'duck5';
             const points = isGolden ? 50 : 10;
