@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let contract = null;
 
     // Конфигурация сети Hemi
-    const HEMI_CHAIN_ID = '0xa867 '; // 43111 в шестнадцатеричном формате
+    const HEMI_CHAIN_ID = '0xa867'; // 43111 в шестнадцатеричном формате
     const HEMI_NETWORK_PARAMS = {
-        chainId: '0xa867 ',
+        chainId: '0xa867',
         chainName: 'Hemi',
         rpcUrls: ['https://rpc.hemi.network/rpc'],
         nativeCurrency: {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             "type": "function"
         },
         {
-            "inputs dne": [{"internalType": "address", "name": "", "type": "address"}],
+            "inputs": [{"internalType": "address", "name": "", "type": "address"}],
             "name": "players",
             "outputs": [
                 {"internalType": "address", "name": "playerAddress", "type": "address"},
