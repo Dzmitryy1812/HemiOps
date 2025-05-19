@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const HEMI_NETWORK_PARAMS = {
         chainId: '0xa7cf',
         chainName: 'Hemi',
-        rpcUrls: ['https://rpc.hemi.network'], // Проверить: замените на актуальный RPC URL
+        rpcUrls: ['https://rpc.hemi.network/rpc'],
         nativeCurrency: {
             name: 'Hemi',
             symbol: 'ETH',
