@@ -1,15 +1,11 @@
 let score = 0;
 let walletAddress = "Not connected";
 const leaderboard = [];
-const contractAddress = "YOUR_CONTRACT_ADDRESS"; // Замени на адрес контракта
+const contractAddress = "0x715045cea81d1DcC604b6A379B94D6049CDaa5a0"; // Твой адрес контракта
 const abi = [
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_score",
-                "type": "uint256"
-            }
+            {"internalType": "uint256", "name": "_score", "type": "uint256"}
         ],
         "name": "setScore",
         "outputs": [],
@@ -20,16 +16,8 @@ const abi = [
         "inputs": [],
         "name": "getLeaderboard",
         "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "",
-                "type": "uint256[]"
-            }
+            {"internalType": "address[]", "name": "", "type": "address[]"},
+            {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
         ],
         "stateMutability": "view",
         "type": "function"
@@ -38,11 +26,7 @@ const abi = [
         "inputs": [],
         "name": "getPlayerCount",
         "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            {"internalType": "uint256", "name": "", "type": "uint256"}
         ],
         "stateMutability": "view",
         "type": "function"
@@ -50,55 +34,30 @@ const abi = [
     {
         "anonymous": false,
         "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "player",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "score",
-                "type": "uint256"
-            }
+            {"indexed": true, "internalType": "address", "name": "player", "type": "address"},
+            {"internalType": "uint256", "name": "score", "type": "uint256"}
         ],
         "name": "ScoreUpdated",
         "type": "event"
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
+            {"internalType": "address", "name": "", "type": "address"}
         ],
         "name": "scores",
         "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            {"internalType": "uint256", "name": "", "type": "uint256"}
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            {"internalType": "uint256", "name": "", "type": "uint256"}
         ],
         "name": "players",
         "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
+            {"internalType": "address", "name": "", "type": "address"}
         ],
         "stateMutability": "view",
         "type": "function"
@@ -122,12 +81,10 @@ connectButton.addEventListener("click", async () => {
       connectButton.textContent = "Connected";
       connectButton.disabled = true;
 
-      // Инициализация контракта
       provider = new ethers.BrowserProvider(window.ethereum);
       signer = await provider.getSigner();
       contract = new ethers.Contract(contractAddress, abi, signer);
 
-      // Добавляем игрока в лидерборд локально
       leaderboard.push({ address: walletAddress, score: 0 });
       await getLeaderboardFromChain();
     } catch (error) {
@@ -142,12 +99,13 @@ connectButton.addEventListener("click", async () => {
 // Подсчёт очков и запись в блокчейн
 document.querySelectorAll(".duck").forEach(duck => {
   duck.addEventListener("click", async () => {
+    duck.classList.add("hidden"); // Скрываем коалу
     score++;
     scoreDisplay.textContent = `Score: ${score}`;
     if (walletAddress !== "Not connected" && contract) {
       try {
         const tx = await contract.setScore(score);
-        await tx.wait(); // Ждём подтверждения транзакции
+        await tx.wait();
         const player = leaderboard.find(p => p.address === walletAddress);
         if (player) player.score = score;
         await getLeaderboardFromChain();
@@ -155,10 +113,17 @@ document.querySelectorAll(".duck").forEach(duck => {
         console.error("Ошибка записи очков:", error);
       }
     }
+    setTimeout(() => {
+      duck.classList.remove("hidden"); // Возрождение коалы
+      duck.style.animation = "none"; // Сбрасываем анимацию
+      setTimeout(() => {
+        duck.style.animation = ""; // Перезапускаем анимацию
+      }, 10);
+    }, 2000);
   });
 });
 
-// Получение лидерборда с блокчейна
+// Получение лидерборда
 async function getLeaderboardFromChain() {
   if (contract) {
     try {
@@ -196,8 +161,7 @@ function updateLeaderboard() {
 async function checkNetwork() {
   if (typeof window.ethereum !== "undefined") {
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    // Замени на Chain ID Hemi Testnet или Mumbai (0x13881)
-    const targetChainId = "0xYOUR_HEMI_CHAIN_ID";
+    const targetChainId = "0x13881"; // Polygon Mumbai для теста
     if (chainId !== targetChainId) {
       try {
         await window.ethereum.request({
