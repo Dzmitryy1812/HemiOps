@@ -134,7 +134,7 @@ contract Leaderboard {
     function getPlayerCount() public view returns (uint256) {
         return playerAddresses.length;
     }
-}
+
 
 The contract is deployed at 0xa523082CfaC400c6913E71A54365E7aBda30fE75 on the Hemi network.
 Technologies
