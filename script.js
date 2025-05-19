@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Игрок 1';
     let contract = null;
 
-    // Конфигурация сети Hemi (оставляем для возможного возврата проверки)
+    // Конфигурация сети Hemi
     const HEMI_CHAIN_ID = '0xa7cf'; // 43111 в шестнадцатеричном формате
     const HEMI_NETWORK_PARAMS = {
         chainId: '0xa7cf',
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             "type": "function"
         },
         {
-            "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+            "inputs dne": [{"internalType": "address", "name": "", "type": "address"}],
             "name": "players",
             "outputs": [
                 {"internalType": "address", "name": "playerAddress", "type": "address"},
@@ -107,45 +107,108 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     ];
 
+    // Функция для показа уведомлений
+    function showNotification(message, type = 'info') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = type; // info, success, error
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 5000);
+    }
+
+    // Проверка, является ли провайдер MetaMask
+    function isMetaMaskProvider() {
+        return window.ethereum && window.ethereum.isMetaMask;
+    }
+
+    // Переключение на сеть Hemi
+    async function switchToHemiNetwork() {
+        console.log('Проверка сети Hemi:', new Date().toISOString());
+        try {
+            const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (currentChainId !== HEMI_CHAIN_ID) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: HEMI_CHAIN_ID }],
+                    });
+                    console.log('Переключено на сеть Hemi');
+                    showNotification('Переключено на сеть Hemi', 'success');
+                } catch (switchError) {
+                    if (switchError.code === 4902) { // Сеть не добавлена
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [HEMI_NETWORK_PARAMS],
+                        });
+                        console.log('Сеть Hemi добавлена');
+                        showNotification('Сеть Hemi добавлена', 'success');
+                    } else {
+                        throw switchError;
+                    }
+                }
+            } else {
+                console.log('Уже в сети Hemi');
+            }
+        } catch (error) {
+            console.error('Ошибка переключения на сеть Hemi:', error);
+            showNotification('Не удалось переключиться на сеть Hemi', 'error');
+        }
+    }
+
     // Инициализация контракта
     async function initContract() {
         console.log('Инициализация контракта:', new Date().toISOString());
-        if (typeof window.ethereum !== 'undefined' && window.Web3) {
+        if (isMetaMaskProvider() && window.Web3) {
             try {
                 const provider = new window.Web3(window.ethereum);
                 contract = new provider.eth.Contract(contractABI, contractAddress);
                 console.log('Контракт успешно инициализирован:', contract);
+                showNotification('Контракт успешно инициализирован', 'success');
             } catch (error) {
                 console.error('Ошибка инициализации контракта:', error);
+                showNotification('Ошибка инициализации контракта', 'error');
             }
         } else {
-            console.log('MetaMask или Web3.js не доступны, контракт не инициализирован');
+            console.log('MetaMask или Web3.js не доступны');
+            showNotification('MetaMask или Web3.js не доступны', 'error');
         }
     }
 
-    // Проверка состояния MetaMask при загрузке
+    // Проверка состояния MetaMask
     async function checkMetaMaskStatus() {
-        if (window.ethereum) {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            console.log('MetaMask: подключённые аккаунты при загрузке:', accounts);
-            window.ethereum.on('chainChanged', (chainId) => {
-                console.log('MetaMask: смена сети на:', chainId);
-            });
-            window.ethereum.on('accountsChanged', (accounts) => {
-                console.log('MetaMask: смена аккаунта:', accounts);
-                if (accounts.length > 0) {
-                    walletAddress = accounts[0];
-                    playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-                    document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                    console.log('Кошелёк обновлён:', walletAddress);
-                } else {
-                    walletAddress = null;
-                    document.getElementById('wallet').textContent = `Wallet: Not connected`;
-                    console.log('Кошелёк отключён');
-                }
-            });
+        if (isMetaMaskProvider()) {
+            try {
+                await switchToHemiNetwork();
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                console.log('MetaMask: подключённые аккаунты при загрузке:', accounts);
+                window.ethereum.on('chainChanged', (chainId) => {
+                    console.log('MetaMask: смена сети на:', chainId);
+                    switchToHemiNetwork();
+                });
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    console.log('MetaMask: смена аккаунта:', accounts);
+                    if (accounts.length > 0) {
+                        walletAddress = accounts[0];
+                        playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                        document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
+                        console.log('Кошелёк обновлён:', walletAddress);
+                        showNotification('Кошелёк обновлён', 'success');
+                    } else {
+                        walletAddress = null;
+                        document.getElementById('wallet').textContent = `Wallet: Not connected`;
+                        console.log('Кошелёк отключён');
+                        showNotification('Кошелёк отключён', 'info');
+                    }
+                });
+            } catch (error) {
+                console.error('Ошибка проверки MetaMask:', error);
+                showNotification('Ошибка проверки MetaMask', 'error');
+            }
         } else {
-            console.log('MetaMask не установлен при загрузке');
+            console.log('MetaMask не установлен или не является доверенным провайдером');
+            showNotification('Пожалуйста, используйте MetaMask', 'error');
         }
     }
     checkMetaMaskStatus();
@@ -155,14 +218,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Загрузка Web3.js...');
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
-        script.onload = () => console.log('Web3.js загружен');
+        script.onload = () => {
+            if (window.Web3 && window.Web3.version && window.Web3.version.startsWith('1.')) {
+                console.log('Web3.js загружен, версия:', window.Web3.version);
+                showNotification('Web3.js успешно загружен', 'success');
+            } else {
+                console.error('Несовместимая версия Web3.js');
+                showNotification('Ошибка: несовместимая версия Web3.js', 'error');
+            }
+        };
         script.onerror = () => {
             console.error('Ошибка загрузки Web3.js');
-            console.log('Не удалось загрузить необходимые библиотеки.');
+            showNotification('Не удалось загрузить Web3.js', 'error');
         };
         document.head.appendChild(script);
     } else {
-        console.log('Web3.js уже доступен');
+        console.log('Web3.js уже доступен, версия:', window.Web3.version);
     }
 
     // Проверяем, найдены ли элементы
@@ -198,12 +269,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         console.log('Отправка запроса к смарт-контракту: updatePlayer', { score, level, from: walletAddress });
                         const result = await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
                         console.log('Лидерборд обновлён в смарт-контракте:', result);
+                        showNotification('Данные игрока обновлены в блокчейне', 'success');
                         await updateLeaderboard();
                     } catch (error) {
                         console.error('Ошибка обновления смарт-контракта:', error);
+                        showNotification('Ошибка обновления данных в блокчейне', 'error');
                     }
                 } else {
                     console.log('Запрос к смарт-контракту не выполнен: contract или walletAddress отсутствуют');
+                    showNotification('Не удалось обновить данные: кошелёк или контракт не подключены', 'error');
                 }
             }
         });
@@ -214,23 +288,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
             console.log('Клик по кнопке Connect Wallet!');
-            if (typeof window.ethereum !== 'undefined') {
+            if (isMetaMaskProvider()) {
                 try {
+                    await switchToHemiNetwork();
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     walletAddress = accounts[0];
                     playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
                     document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
                     console.log('Кошелёк подключён:', walletAddress);
+                    showNotification('Кошелёк успешно подключён', 'success');
                     await initContract();
                     await updateLeaderboard();
                 } catch (error) {
                     console.error('Ошибка подключения кошелька:', error);
-                    console.log('Не удалось подключить кошелёк. Проверьте MetaMask.');
-                    // alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
+                    showNotification('Ошибка подключения кошелька. Проверьте MetaMask.', 'error');
                 }
             } else {
                 console.log('MetaMask не установлен');
-                // alert('Установите MetaMask для подключения кошелька!');
+                showNotification('Установите MetaMask для подключения кошелька!', 'error');
             }
         });
     }
@@ -252,12 +327,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     });
                     console.log('Лидерборд обновлён:', leaderboardData);
+                    showNotification('Лидерборд успешно обновлён', 'success');
                 }
             } catch (error) {
                 console.error('Ошибка загрузки лидерборда:', error);
+                showNotification('Ошибка загрузки лидерборда', 'error');
             }
         } else {
             console.log('Лидерборд не обновлён: контракт не инициализирован');
+            showNotification('Лидерборд не обновлён: контракт не подключён', 'error');
         }
     }
 
