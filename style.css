@@ -1,123 +1,119 @@
 html, body {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-  }
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
 
-  body {
-    background: linear-gradient(#ff6200, #ff8c00);
-    cursor: crosshair;
-    overflow: hidden;
-  }
+body {
+  background: linear-gradient(#ff6200, #ff8c00);
+  cursor: crosshair;
+  overflow: hidden;
+}
 
-  body:active .duck:active {
-    box-shadow: orange 0px 0px 0px 3000px;
-  }
+body:active .duck:active {
+  box-shadow: orange 0px 0px 0px 3000px;
+}
 
-  h2 {
-    position: absolute;
-    font-family: sans-serif;
-    top: 0px;
-    text-align: center;
-    left: 0px;
-    right: 0px;
-    padding: 5%;
-    color: white;
-    text-shadow: 2px 2px 4px black;
-  }
+h2 {
+  position: absolute;
+  font-family: sans-serif;
+  top: 0px;
+  text-align: center;
+  left: 0px;
+  right: 0px;
+  padding: 5%;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+}
 
-  #game-info {
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    color: white;
-    font-family: sans-serif;
-    z-index: 20;
-  }
+#game-info {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  color: white;
+  font-family: sans-serif;
+  z-index: 20;
+}
 
-  #connect-wallet {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-  }
+#connect-wallet {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
 
-  #leaderboard {
-    margin-top: 20px;
-  }
+#leaderboard {
+  margin-top: 20px;
+}
 
-  #leaderboard table {
-    border-collapse: collapse;
-    background: rgba(0, 0, 0, 0.5);
-  }
+#leaderboard table {
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.5);
+}
 
-  #leaderboard th, #leaderboard td {
-    border: 1px solid white;
-    padding: 5px;
-  }
+#leaderboard th, #leaderboard td {
+  border: 1px solid white;
+  padding: 5px;
+}
 
-  .duck {
-    position: absolute;
-    left: -150px;
-    right: 0px;
-    height: 0px;
-    border-radius: 100%;
-    z-index: 10;
-    transform: translateZ(0);
-    animation: fly 8s linear infinite;
-  }
+.duck {
+  position: absolute;
+  left: -150px;
+  right: 0px;
+  height: 0px;
+  border-radius: 100%;
+  z-index: 10;
+  transform: translateZ(0);
+  animation: fly 8s linear infinite;
+}
 
-  .duck a {
-    display: block;
-    cursor: crosshair;
-    transition: all 0.6s;
-    background-size: contain;
-    width: 100px;
-    height: 100px;
-    animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
-  }
+.duck a {
+  display: block;
+  cursor: crosshair;
+  transition: all 0.6s;
+  background-size: 100% 100%; /* Изображение заполняет контейнер без обрезки */
+  width: 100px;
+  height: 100px;
+  animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
+}
 
-  .duck a:after {
-    content: "";
-    display: block;
-    padding-bottom: 0;
-  }
+.duck a:after {
+  content: "";
+  display: block;
+  padding-bottom: 0;
+}
 
-  /* Разные изображения для каждой коалы */
-  .duck#duck1 a { background: no-repeat center url(target1.png); }
-  .duck#duck2 a { background: no-repeat center url(target2.png); }
-  .duck#duck3 a { background: no-repeat center url(target3.png); }
-  .duck#duck4 a { background: no-repeat center url(target4.png); }
-  .duck#duck5 a { background: no-repeat center url(target5.png); }
+/* Разные изображения для каждой коалы */
+.duck#duck1 a { background: no-repeat center url(target1.png); }
+.duck#duck2 a { background: no-repeat center url(target2.png); }
+.duck#duck3 a { background: no-repeat center url(target3.png); }
+.duck#duck4 a { background: no-repeat center url(target4.png); }
+.duck#duck5 a { background: no-repeat center url(target5.png); }
 
-  .duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
-  .duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
-  .duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
-  .duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
-  .duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
-  .duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
-  .duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
-  .duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
-  .duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
-  .duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
+.duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
+.duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
+.duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
+.duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
+.duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
 
-  @keyframes fly {
-    0% { transform: translateX(0px); }
-    100% { transform: translateX(100vw); }
-  }
+@keyframes fly {
+  0% { transform: translateX(0px); }
+  100% { transform: translateX(100vw); }
+}
 
-  @keyframes float {
-    0% { transform: translateY(40%); }
-    50% { transform: translateY(-40%); }
-    100% { transform: translateY(40%); }
-  }
+@keyframes float {
+  0% { transform: translateY(40%); }
+  50% { transform: translateY(-40%); }
+  100% { transform: translateY(40%); }
+}
 
-  .duck.hidden {
-    display: none;
-  }
-
-  .duck {
-    animation-play-state: running;
-  }
+.duck.hidden {
+  display: none;
+}
