@@ -1,38 +1,44 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Стреляй по HEMI!</title>
-    <link rel="stylesheet" href="style.css">
+    <title>HemiOps</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="level-1">
-    <h2>Стреляй по HEMI!</h2>
-    <div id="game-info">
-        <button type="button" id="connect-wallet">Connect Wallet</button>
-        <div id="wallet">Wallet: Not connected</div>
-        <div id="score">Score: 0</div>
-        <div id="level">Level: 1</div>
-        <button type="button" id="refresh-leaderboard">Обновить</button>
-        <div id="leaderboard">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Игрок</th>
-                        <th>Очки</th>
-                        <th>Уровень</th>
-                        <th>Последнее обновление</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <header>
+        <h1>HemiOps</h1>
+        <p>Click the ducks to earn points and level up!</p>
+    </header>
+    <div class="game-info">
+        <span id="score">Score: 0</span>
+        <span id="level">Level: 1</span>
+        <span id="wallet">Wallet: Not connected</span>
+        <button id="connect-wallet">Connect Wallet</button>
     </div>
-    <div class="duck" id="duck1"><a><img src="target1.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck2"><a><img src="target2.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck3"><a><img src="target3.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck4"><a><img src="target4.png" alt="HEMI"></a></div>
-    <div class="duck" id="duck5"><a><img src="target_golden.png" alt="target_golden.png"></a></div>
+    <div class="game-area">
+        <div class="duck" id="duck1"><a href="#">🦆</a></div>
+        <div class="duck" id="duck2"><a href="#">🦆</a></div>
+        <div class="duck" id="duck3"><a href="#">🦆</a></div>
+        <div class="duck" id="duck4"><a href="#">🦆</a></div>
+        <div class="duck" id="duck5"><a href="#">🌟</a></div>
+    </div>
+    <div class="leaderboard">
+        <h2>Leaderboard</h2>
+        <button id="refresh-leaderboard">Refresh Leaderboard</button>
+        <table id="leaderboard">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Score</th>
+                    <th>Level</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
