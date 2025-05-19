@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Подключение кошелька через MetaMask
     document.getElementById('connect-wallet').addEventListener('click', async () => {
-        if (typeof window.ethereum !== 'undefined') {
+        if (typeof window.ethereum !== 'undefined' && typeof ethers !== 'undefined') {
             try {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const accounts = await provider.send('eth_requestAccounts', []);
@@ -46,10 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('wallet').textContent = `Wallet: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
             } catch (error) {
                 console.error('Ошибка подключения кошелька:', error);
-                alert('Не удалось подключить кошелек. Проверьте MetaMask.');
+                alert('Не удалось подключить кошелек. Проверьте MetaMask или загрузку ethers.js.');
             }
         } else {
-            alert('Установите MetaMask для подключения кошелька!');
+            console.error('ethers.js не загружен или MetaMask не установлен');
+            alert('Установите MetaMask и убедитесь, что ethers.js загружен!');
         }
     });
 
