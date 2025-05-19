@@ -38,37 +38,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Подключение кошелька через MetaMask
-    document.getElementById('connect-wallet').addEventListener('click', async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                // Запрашиваем доступ к аккаунту
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                walletAddress = accounts[0];
-                playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-                document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                console.log('Кошелёк подключён:', walletAddress);
-            } catch (error) {
-                console.error('Ошибка подключения кошелька:', error);
-                alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
+    const connectWalletButton = document.getElementById('connect-wallet');
+    if (connectWalletButton) {
+        connectWalletButton.addEventListener('click', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    // Запрашиваем доступ к аккаунту
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    walletAddress = accounts[0];
+                    playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                    document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
+                    console.log('Кошелёк подключён:', walletAddress);
+                } catch (error) {
+                    console.error('Ошибка подключения кошелька:', error);
+                    alert('Не удалось подключить кошелёк. Проверьте MetaMask.');
+                }
+            } else {
+                console.error('MetaMask не установлен');
+                alert('Установите MetaMask для подключения кошелька!');
             }
-        } else {
-            console.error('MetaMask не установлен');
-            alert('Установите MetaMask для подключения кошелька!');
-        }
-    });
+        });
+    } else {
+        console.error('Кнопка Connect Wallet не найдена');
+    }
 
     // Обновление лидерборда
-    document.getElementById('refresh-leaderboard').addEventListener('click', () => {
-        // Пример статического лидерборда (замените на API при необходимости)
-        const leaderboard = [
-            { player: playerName, score: score, level: level },
-            { player: 'Игрок 2', score: 100, level: 1 },
-            { player: 'Игрок 3', score: 50, level: 1 }
-        ];
-        const tbody = document.querySelector('#leaderboard tbody');
-        tbody.innerHTML = '';
-        leaderboard.forEach(row => {
-            tbody.innerHTML += `<tr><td>${row.player}</td><td>${row.score}</td><td>${row.level}</td></tr>`;
+    const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
+    if (refreshLeaderboardButton) {
+        refreshLeaderboardButton.addEventListener('click', () => {
+            // Пример статического лидерборда (замените на API при необходимости)
+            const leaderboard = [
+                { player: playerName, score: score, level: level },
+                { player: 'Игрок 2', score: 100, level: 1 },
+                { player: 'Игрок 3', score: 50, level: 1 }
+            ];
+            const tbody = document.querySelector('#leaderboard tbody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                leaderboard.forEach(row => {
+                    tbody.innerHTML += `<tr><td>${row.player}</td><td>${row.score}</td><td>${row.level}</td></tr>`;
+                });
+            } else {
+                console.error('Таблица лидерборда не найдена');
+            }
         });
-    });
+    } else {
+        console.error('Кнопка Обновить не найдена');
+    }
 });
