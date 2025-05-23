@@ -7,13 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="level-1">
+    <!-- Меню -->
+    <div id="menu" style="display: flex;">
+        <div class="menu-container">
+            <h1>HemiOps</h1>
+            <button id="start-game">Start Game</button>
+            <button id="how-to-play">How to Play</button>
+            <button id="mint-nft" disabled>Mint NFT</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно с инструкциями -->
+    <div id="instructions-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-instructions" class="close">×</span>
+            <h2>How to Play</h2>
+            <p>Click on the ducks to earn points!</p>
+            <p>- Regular ducks: 10 points</p>
+            <p>- Golden duck: 50 points</p>
+            <p>Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!</p>
+        </div>
+    </div>
+
+    <!-- Игровое поле -->
     <h2>HemiOps</h2>
     <div id="game-info">
         <button id="connect-wallet">Connect Wallet</button>
         <div id="wallet">Wallet: Not connected</div>
         <div id="score">Score: 0</div>
         <div id="level">Level: 1</div>
-        <div id="notification"></div>
         <div id="leaderboard">
             <button id="refresh-leaderboard">Update</button>
             <table>
@@ -30,11 +52,14 @@
         </div>
     </div>
 
-    <div class="duck" id="duck1"><a><img src="target1.png"></a></div>
-    <div class="duck" id="duck2"><a><img src="target2.png"></a></div>
-    <div class="duck" id="duck3"><a><img src="target3.png"></a></div>
-    <div class="duck" id="duck4"><a><img src="target4.png"></a></div>
-    <div class="duck" id="duck5"><a><img src="target_golden.png"></a></div>
+    <div id="notification"></div>
+
+    <!-- Утки в корне с исходными путями -->
+    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
+    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
+    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
+    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
+    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
 
     <script src="script.js"></script>
 </body>
