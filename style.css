@@ -13,17 +13,31 @@ body {
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
+body.level-1 .duck { animation: fly 8s linear infinite; }
+body.level-1 .duck a { width: 100px; height: 100px; }
+
 body.level-2 { background: linear-gradient(#ff4500, #ff6347); }
+body.level-2 .duck { animation: fly 7s linear infinite; }
+body.level-2 .duck a { width: 90px; height: 90px; }
+
 body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
+body.level-3 .duck { animation: fly 6s linear infinite; }
+body.level-3 .duck a { width: 80px; height: 80px; }
+
 body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
+body.level-4 .duck { animation: fly 5s linear infinite; }
+body.level-4 .duck a { width: 70px; height: 70px; }
+
 body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
+body.level-5 .duck { animation: fly 4s linear infinite; }
+body.level-5 .duck a { width: 60px; height: 60px; }
 
 .duck:active {
   box-shadow: 0 0 20px 10px rgba(255, 165, 0, 0.5);
   transition: box-shadow 0.3s;
 }
 
-h2 {
+h1, h2 {
   position: absolute;
   font-family: sans-serif;
   top: 0px;
@@ -44,17 +58,26 @@ h2 {
   z-index: 20;
 }
 
-#connect-wallet, #refresh-leaderboard {
+#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
   background: #333;
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
   margin-bottom: 10px;
+  display: block;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#connect-wallet:hover, #refresh-leaderboard:hover {
+#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
   background: #555;
+}
+
+#mint-nft:disabled {
+  background: #666;
+  cursor: not-allowed;
 }
 
 #notification {
@@ -92,7 +115,7 @@ h2 {
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-  min-width: 120px; /* Для столбца "Последнее обновление" */
+  min-width: 120px;
 }
 
 .duck {
@@ -124,7 +147,6 @@ h2 {
   object-position: center;
 }
 
-/* Выделение золотой утки */
 #duck5 a img {
   border: 2px solid gold;
   border-radius: 50%;
@@ -157,14 +179,63 @@ h2 {
   display: none;
 }
 
+/* Стили для меню */
+.menu-container {
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Стили для модального окна */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  color: #333;
+  font-family: sans-serif;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
   .duck a { width: 80px; height: 80px; }
   #game-info { top: 20px; font-size: 14px; }
   #leaderboard table { font-size: 12px; }
+  .menu-container { padding: 15px; }
+  .modal-content { padding: 15px; }
 }
 
 @media (max-width: 600px) {
   .duck a { width: 60px; height: 60px; }
   #game-info { top: 10px; font-size: 12px; }
   #leaderboard table { font-size: 10px; }
+  .menu-container { padding: 10px; }
+  .modal-content { padding: 10px; }
 }
