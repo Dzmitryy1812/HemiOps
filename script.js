@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         blockExplorerUrls: ['https://explorer.hemi.xyz/'],
     };
-    const contractAddress = '0xa523082CfaC400c6913E71A54365E7aBda30fE75'; // Update after deploying new contract
+    const contractAddress = '0x6892735450a27F206ADf4f969dFD29e6d3d7199F'; // Update after deploying new contract
     const contractABI = [
         {
             "anonymous": false,
