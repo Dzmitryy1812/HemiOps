@@ -1,7 +1,7 @@
 {
   "name": "NFT2",
   "description": "A unique NFT reward for completing Level 2 of HemiOps!",
-  "image": "https://hemiops.netlify.app/nft2.png",
+  "image": "https://hemiops.netlify.app/nft2.jpeg",
   "attributes": [
     { "trait_type": "Level", "value": "2" }
   ]
