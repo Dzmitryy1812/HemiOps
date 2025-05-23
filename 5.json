@@ -1,7 +1,7 @@
 {
   "name": "NFT5",
   "description": "A rare NFT reward for completing Level 5 of HemiOps!",
-  "image": "https://hemiops.netlify.app/nft5.png",
+  "image": "https://hemiops.netlify.app/nft5.jpeg",
   "attributes": [
     { "trait_type": "Level", "value": "5" },
     { "trait_type": "Rarity", "value": "Legendary" }
