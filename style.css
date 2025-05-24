@@ -64,10 +64,11 @@ h1 {
 #game-info {
     position: absolute;
     top: 50px;
-    left: 10px;
+    right: 10px; /* Изменено с left: 10px на right: 10px */
     color: white;
     font-family: sans-serif;
     z-index: 20;
+    text-align: right; /* Выравнивание текста вправо */
 }
 
 #connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
@@ -197,6 +198,12 @@ h1 {
 }
 
 /* Стили для меню */
+#menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 200px; /* Увеличено с 150px до 200px */
+}
+
 .menu-container {
     margin: auto;
     text-align: center;
