@@ -197,12 +197,6 @@ h1 {
 }
 
 /* Стили для меню */
-#menu {
-    display: flex;
-    justify-content: center;
-    margin-top: 200px;
-}
-
 .menu-container {
     margin: auto;
     text-align: center;
