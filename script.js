@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         console.log('Wallet updated:', walletAddress);
                         showNotification('Wallet updated', 'success');
                         document.getElementById('mint-nft').disabled = false;
+                        document.getElementById('connect-wallet').textContent = 'Disconnect';
                     } else {
                         walletAddress = null;
                         document.getElementById('wallet').textContent = `Wallet: Not connected`;
@@ -228,6 +229,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         showNotification('Wallet disconnected', 'info');
                         document.getElementById('mint-nft').disabled = true;
                         document.getElementById('connect-wallet').textContent = 'Connect Wallet';
+                        contract = null; // Сбрасываем контракт
+                        clearLeaderboard(); // Очищаем лидерборд
                     }
                 });
             } catch (error) {
@@ -330,41 +333,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     const connectWalletButton = document.getElementById('connect-wallet');
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
-            console.log('Click on the Connect Wallet button!');
-            if (isMetaMaskProvider()) {
-                try {
-                    await switchToHemiNetwork();
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    walletAddress = accounts[0];
-                    playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-                    document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                    console.log('Wallet connected:', walletAddress);
-                    showNotification('Wallet successfully connected', 'success');
-                    document.getElementById('connect-wallet').textContent = 'Disconnect'; // Изменяем текст на "Disconnect"
-                    document.getElementById('mint-nft').disabled = false;
-                    await initContract();
-                    await updateLeaderboard();
-                } catch (error) {
-                    console.error('Wallet connection error:', error);
-                    showNotification('Wallet connection error. Check MetaMask.', 'error');
+            if (!walletAddress) {
+                // Подключение кошелька
+                console.log('Click on the Connect Wallet button!');
+                if (isMetaMaskProvider()) {
+                    try {
+                        await switchToHemiNetwork();
+                        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        walletAddress = accounts[0];
+                        playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+                        document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
+                        console.log('Wallet connected:', walletAddress);
+                        showNotification('Wallet successfully connected', 'success');
+                        document.getElementById('connect-wallet').textContent = 'Disconnect';
+                        document.getElementById('mint-nft').disabled = false;
+                        await initContract();
+                        await updateLeaderboard();
+                    } catch (error) {
+                        console.error('Wallet connection error:', error);
+                        showNotification('Wallet connection error. Check MetaMask.', 'error');
+                    }
+                } else {
+                    console.log('MetaMask is not installed');
+                    showNotification('Install MetaMask to connect your wallet!', 'error');
                 }
             } else {
-                console.log('MetaMask is not installed');
-                showNotification('Install MetaMask to connect your wallet!', 'error');
-            }
-        });
-
-        // Обработчик для отключения кошелька
-        connectWalletButton.addEventListener('click', () => {
-            if (walletAddress) {
+                // Отключение кошелька
                 walletAddress = null;
+                contract = null; // Сбрасываем контракт
                 document.getElementById('wallet').textContent = 'Wallet: Not connected';
-                document.getElementById('connect-wallet').textContent = 'Connect Wallet'; // Возвращаем текст "Connect Wallet"
+                document.getElementById('connect-wallet').textContent = 'Connect Wallet';
                 document.getElementById('mint-nft').disabled = true;
-                showNotification('Wallet disconnected', 'info');
+                clearLeaderboard(); // Очищаем лидерборд
+                showNotification('Wallet disconnected. To fully disconnect, also disconnect in MetaMask.', 'info');
                 console.log('Wallet disconnected');
             }
         });
+    }
+
+    function clearLeaderboard() {
+        const tbody = document.querySelector('#leaderboard tbody');
+        if (tbody) {
+            tbody.innerHTML = '';
+            console.log('Leaderboard cleared');
+        }
     }
 
     async function updateLeaderboard() {
