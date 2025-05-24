@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Player 1';
     let contract = null;
     let gameStarted = false;
-    let hideTimeout;
+    let hideTimeout; // Единственная декларация hideTimeout
 
     // Points required to level up for each level
     const POINTS_TO_LEVEL_UP = {
@@ -286,7 +286,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Ducks found:', ducks.length);
 
     // Handle clicks on ducks
-    let hideTimeout;
     ducks.forEach(duck => {
         duck.addEventListener('click', async (event) => {
             event.preventDefault();
