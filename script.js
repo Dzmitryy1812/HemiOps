@@ -6,9 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Player 1';
     let contract = null;
     let gameStarted = false;
-    let hideTimeout; // Единственная декларация hideTimeout
+    let hideTimeout;
 
-    // Points required to level up for each level
     const POINTS_TO_LEVEL_UP = {
         1: 100,
         2: 150,
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         5: 300
     };
 
-    // Hemi network configuration
     const HEMI_CHAIN_ID = '0xa867';
     const HEMI_NETWORK_PARAMS = {
         chainId: '0xa867',
@@ -139,7 +137,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     ];
 
-    // Function to show notifications
     function showNotification(message, type = 'info') {
         const notification = document.getElementById('notification');
         notification.textContent = message;
@@ -150,12 +147,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 5000);
     }
 
-    // Check if provider is MetaMask
     function isMetaMaskProvider() {
         return window.ethereum && window.ethereum.isMetaMask;
     }
 
-    // Switch to Hemi network
     async function switchToHemiNetwork() {
         console.log('Checking Hemi network:', new Date().toISOString());
         try {
@@ -189,7 +184,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Initialize contract
     async function initContract() {
         console.log('Initializing contract:', new Date().toISOString());
         if (isMetaMaskProvider() && window.Web3) {
@@ -208,7 +202,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Check MetaMask status
     async function checkMetaMaskStatus() {
         if (isMetaMaskProvider()) {
             try {
@@ -234,6 +227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         console.log('Wallet disconnected');
                         showNotification('Wallet disconnected', 'info');
                         document.getElementById('mint-nft').disabled = true;
+                        document.getElementById('connect-wallet').textContent = 'Connect Wallet';
                     }
                 });
             } catch (error) {
@@ -247,7 +241,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     checkMetaMaskStatus();
 
-    // Load Web3.js
     if (!window.Web3) {
         console.log('Loading Web3.js...');
         const script = document.createElement('script');
@@ -270,7 +263,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Web3.js already available, version:', window.Web3.version);
     }
 
-    // Check image loading
     document.querySelectorAll('.duck img').forEach(img => {
         img.addEventListener('error', () => {
             console.error('Failed to load image:', img.src);
@@ -281,11 +273,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Check if elements are found
     const ducks = document.querySelectorAll('.duck a');
     console.log('Ducks found:', ducks.length);
 
-    // Handle clicks on ducks
     ducks.forEach(duck => {
         duck.addEventListener('click', async (event) => {
             event.preventDefault();
@@ -337,7 +327,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Connect wallet via MetaMask
     const connectWalletButton = document.getElementById('connect-wallet');
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
@@ -351,9 +340,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
                     console.log('Wallet connected:', walletAddress);
                     showNotification('Wallet successfully connected', 'success');
+                    document.getElementById('connect-wallet').textContent = 'Disconnect'; // Изменяем текст на "Disconnect"
+                    document.getElementById('mint-nft').disabled = false;
                     await initContract();
                     await updateLeaderboard();
-                    document.getElementById('mint-nft').disabled = false;
                 } catch (error) {
                     console.error('Wallet connection error:', error);
                     showNotification('Wallet connection error. Check MetaMask.', 'error');
@@ -363,9 +353,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showNotification('Install MetaMask to connect your wallet!', 'error');
             }
         });
+
+        // Обработчик для отключения кошелька
+        connectWalletButton.addEventListener('click', () => {
+            if (walletAddress) {
+                walletAddress = null;
+                document.getElementById('wallet').textContent = 'Wallet: Not connected';
+                document.getElementById('connect-wallet').textContent = 'Connect Wallet'; // Возвращаем текст "Connect Wallet"
+                document.getElementById('mint-nft').disabled = true;
+                showNotification('Wallet disconnected', 'info');
+                console.log('Wallet disconnected');
+            }
+        });
     }
 
-    // Update leaderboard
     async function updateLeaderboard() {
         if (contract) {
             try {
@@ -394,13 +395,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Refresh leaderboard on button click
     const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
     if (refreshLeaderboardButton) {
         refreshLeaderboardButton.addEventListener('click', updateLeaderboard);
     }
 
-    // Handle "Start Game" button
     const startGameButton = document.getElementById('start-game');
     if (startGameButton) {
         startGameButton.addEventListener('click', () => {
@@ -414,7 +413,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Handle "How to Play" button
     const howToPlayButton = document.getElementById('how-to-play');
     const instructionsModal = document.getElementById('instructions-modal');
     const closeInstructions = document.getElementById('close-instructions');
@@ -429,7 +427,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Handle "Mint NFT" button
     const mintNFTButton = document.getElementById('mint-nft');
     if (mintNFTButton) {
         mintNFTButton.addEventListener('click', async () => {
