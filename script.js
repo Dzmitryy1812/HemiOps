@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Player 1';
     let contract = null;
     let gameStarted = false;
+    let hideTimeout;
 
     // Points required to level up for each level
     const POINTS_TO_LEVEL_UP = {
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         blockExplorerUrls: ['https://explorer.hemi.xyz/'],
     };
-    const contractAddress = '0x6892735450a27F206ADf4f969dFD29e6d3d7199F'; // Update after deploying new contract
+    const contractAddress = '0x6892735450a27F206ADf4f969dFD29e6d3d7199F';
     const contractABI = [
         {
             "anonymous": false,
@@ -269,35 +270,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Web3.js already available, version:', window.Web3.version);
     }
 
+    // Check image loading
+    document.querySelectorAll('.duck img').forEach(img => {
+        img.addEventListener('error', () => {
+            console.error('Failed to load image:', img.src);
+            showNotification('Ошибка загрузки изображения утки', 'error');
+        });
+        img.addEventListener('load', () => {
+            console.log('Image loaded:', img.src);
+        });
+    });
+
     // Check if elements are found
     const ducks = document.querySelectorAll('.duck a');
     console.log('Ducks found:', ducks.length);
 
     // Handle clicks on ducks
+    let hideTimeout;
     ducks.forEach(duck => {
         duck.addEventListener('click', async (event) => {
-            if (!gameStarted) return; // Ignore clicks if game hasn't started
-            console.log('Duck clicked:', duck.parentElement.id);
+            event.preventDefault();
+            if (!gameStarted) {
+                console.log('Game not started, ignoring click');
+                return;
+            }
             const targetDuck = event.currentTarget.parentElement;
+            console.log('Duck clicked:', targetDuck.id);
             const isGolden = targetDuck.id === 'duck5';
             const points = isGolden ? 50 : 10;
             score += points;
             document.getElementById('score').textContent = `Score: ${score}`;
+            clearTimeout(hideTimeout);
             targetDuck.classList.add('hidden');
-
-            setTimeout(() => {
+            console.log('Hidden class added:', targetDuck.classList.contains('hidden'), 
+                        'Display:', getComputedStyle(targetDuck).display);
+            hideTimeout = setTimeout(() => {
                 targetDuck.classList.remove('hidden');
+                console.log('Hidden class removed:', targetDuck.id, 
+                            'Display:', getComputedStyle(targetDuck).display);
             }, 2000);
 
             const pointsToLevelUp = POINTS_TO_LEVEL_UP[level];
             if (score >= pointsToLevelUp) {
                 level++;
-                if (level > 5) level = 1; // Cycle levels
+                if (level > 5) level = 1;
                 document.getElementById('level').textContent = `Level: ${level}`;
                 document.body.className = `level-${level}`;
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
-
                 console.log('Level up: contract=', contract, 'walletAddress=', walletAddress);
                 if (contract && walletAddress) {
                     try {
@@ -385,10 +405,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const startGameButton = document.getElementById('start-game');
     if (startGameButton) {
         startGameButton.addEventListener('click', () => {
+            console.log('Starting game...');
             document.getElementById('menu').style.display = 'none';
-            // Show ducks
             document.querySelectorAll('.duck').forEach(duck => {
                 duck.style.display = 'block';
+                console.log('Duck displayed:', duck.id, 'Display:', getComputedStyle(duck).display);
             });
             gameStarted = true;
         });
