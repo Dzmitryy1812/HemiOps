@@ -64,14 +64,36 @@ h1 {
 #game-info {
     position: absolute;
     top: 50px;
-    right: 10px; /* Изменено с left: 10px на right: 10px */
+    right: 10px;
     color: white;
     font-family: sans-serif;
     z-index: 20;
-    text-align: right; /* Выравнивание текста вправо */
+    display: flex; /* Используем flex для горизонтального выравнивания */
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+    gap: 20px; /* Отступ между кнопками и текстом */
 }
 
-#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
+.info-text {
+    display: flex;
+    flex-direction: column; /* Текст располагается вертикально */
+    gap: 5px; /* Отступ между строками текста */
+}
+
+#connect-wallet, #refresh-leaderboard {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 16px; /* Уменьшенные отступы для компактности */
+    cursor: pointer;
+    width: auto; /* Убираем фиксированную ширину */
+    display: inline-block; /* Кнопки на одной линии */
+}
+
+#connect-wallet:hover, #refresh-leaderboard:hover {
+    background: #555;
+}
+
+#mint-nft {
     background: #333;
     color: white;
     border: none;
@@ -84,7 +106,7 @@ h1 {
     margin-right: auto;
 }
 
-#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
+#mint-nft:hover:not(:disabled) {
     background: #555;
 }
 
@@ -201,7 +223,7 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 200px; /* Увеличено с 150px до 200px */
+    margin-top: 200px;
 }
 
 .menu-container {
