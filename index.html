@@ -14,7 +14,7 @@
     </h1>
 
     <!-- Меню -->
-    <div id="menu" style="display: flex; justify-content: center; margin-top: 230px;">
+    <div id="menu">
         <div class="menu-container" style="text-align: center;">
             <button id="start-game">Start Game</button>
             <button id="how-to-play">How to Play</button>
@@ -36,9 +36,11 @@
     <!-- Игровое поле -->
     <div id="game-info" style="margin-top: 30px;">
         <button id="connect-wallet">Connect Wallet</button>
-        <div id="wallet">Wallet: Not connected</div>
-        <div id="score">Score: 0</div>
-        <div id="level">Level: 1</div>
+        <div class="info-text">
+            <div id="wallet">Wallet: Not connected</div>
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+        </div>
         <div id="leaderboard">
             <button id="refresh-leaderboard">Update</button>
             <table>
