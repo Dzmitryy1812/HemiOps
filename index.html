@@ -14,7 +14,7 @@
     </h1>
 
     <!-- Меню -->
-    <div id="menu">
+    <div id="menu" style="display: flex; justify-content: center; margin-top: 150px;">
         <div class="menu-container" style="text-align: center;">
             <button id="start-game">Start Game</button>
             <button id="how-to-play">How to Play</button>
@@ -36,36 +36,8 @@
     <!-- Игровое поле -->
     <div id="game-info" style="margin-top: 30px;">
         <button id="connect-wallet">Connect Wallet</button>
-        <div class="info-text">
-            <div id="wallet">Wallet: Not connected</div>
-            <div id="score">Score: 0</div>
-            <div id="level">Level: 1</div>
-        </div>
+        <div id="wallet">Wallet: Not connected</div>
+        <div id="score">Score: 0</div>
+        <div id="level">Level: 1</div>
         <div id="leaderboard">
             <button id="refresh-leaderboard">Update</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Points</th>
-                        <th>Level</th>
-                        <th>Last update</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="notification"></div>
-
-    <!-- Утки -->
-    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
-    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
-    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
-    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
-    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
-
-    <script src="script.js"></script>
-</body>
-</html>
