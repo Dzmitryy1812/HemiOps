@@ -41,12 +41,24 @@ h1, h2 {
     position: absolute;
     font-family: sans-serif;
     top: 0px;
-    text-align: center;
     left: 0px;
     right: 0px;
     padding: 5%;
     color: white;
     text-shadow: 2px 2px 4px black;
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
 #game-info {
@@ -128,7 +140,7 @@ h1, h2 {
     transform: translateZ(0);
     animation: fly 8s linear infinite;
     pointer-events: auto;
-    display: block; /* Явно задаём display */
+    display: block;
 }
 
 .duck a {
