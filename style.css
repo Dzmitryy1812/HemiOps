@@ -11,11 +11,12 @@ body {
     background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
     background-size: cover;
     cursor: crosshair;
-    overflow: hidden;
+    overflow-x: hidden; /* Отключаем только горизонтальную прокрутку */
+    overflow-y: visible; /* Разрешаем вертикальную видимость */
     transition: background 0.5s;
-    position: relative; /* Для правильного позиционирования футера */
-    min-height: 100vh; /* Убедимся, что тело занимает всю высоту */
-    padding-bottom: 60px; /* Отступ снизу для футера */
+    position: relative;
+    min-height: 100vh;
+    height: 100vh; /* Гарантируем, что фон занимает весь экран */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -43,7 +44,7 @@ body.level-5 .duck a { width: 60px; height: 60px; }
     transition: box-shadow 0.3s;
 }
 
-h1, h2, p, th, td, #game-info div, #notification, .footer-text, .footer-year, .close, .menu-container, #leaderboard button {
+h1, h2, p, th, td, #game-info div, #notification, .close, .menu-container, #leaderboard button {
     font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     color: white;
@@ -91,7 +92,7 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     border-radius: 5px;
-    font-family: 'Press Start 2P', sans-serif; /* Единый стиль для кнопок */
+    font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     text-shadow: 2px 2px 4px black;
 }
@@ -136,7 +137,7 @@ h1 {
     border: 1px solid white;
     padding: 5px;
     text-align: center;
-    font-size: 12px; /* Единый размер */
+    font-size: 12px;
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
@@ -213,8 +214,16 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 330px;
+    margin-top: 150px; /* Уменьшаем отступ, чтобы меню было ниже */
+    position: relative;
     z-index: 30;
+    animation: pulse 2s infinite ease-in-out; /* Добавляем лёгкую анимацию */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .menu-container {
@@ -224,7 +233,7 @@ h1 {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
+    font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     color: white;
     text-shadow: 2px 2px 4px black;
@@ -252,7 +261,7 @@ h1 {
     width: 90%;
     position: relative;
     color: white;
-    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
+    font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     text-shadow: 2px 2px 4px black;
 }
@@ -267,29 +276,6 @@ h1 {
     text-shadow: 1px 1px 2px black;
 }
 
-/* Стили для футера */
-footer {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
-    font-size: 12px;
-    text-shadow: 2px 2px 4px black;
-    z-index: 20; /* Выше уток (z-index: 10) */
-}
-
-.footer-text {
-    font-size: 12px; /* Единый размер */
-}
-
-.footer-year {
-    font-size: 12px; /* Единый размер */
-    margin-top: 5px; /* Отступ между строками */
-}
-
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
@@ -297,8 +283,7 @@ footer {
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
-    .footer-text { font-size: 9px; }
-    .footer-year { font-size: 9px; }
+    #menu { margin-top: 120px; } /* Уменьшаем отступ для меньших экранов */
 }
 
 @media (max-width: 600px) {
@@ -307,6 +292,5 @@ footer {
     #leaderboard table { font-size: 8px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
-    .footer-text { font-size: 7px; }
-    .footer-year { font-size: 7px; }
+    #menu { margin-top: 100px; } /* Ещё меньше для маленьких экранов */
 }
