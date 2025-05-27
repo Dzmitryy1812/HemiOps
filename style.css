@@ -1,14 +1,16 @@
+/* Устанавливаем единый шрифт для всего документа */
 html, body {
     height: 100%;
     margin: 0px;
     padding: 0px;
     width: 100%;
+    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт для всего */
 }
 
 body {
     background: linear-gradient(#ff6200, #ff8c00);
     background-blend-mode: overlay;
-    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
+    background-image: url('https://www.transparenttextures.com/patterns/water.png');
     background-size: cover;
     cursor: crosshair;
     overflow: hidden;
@@ -88,6 +90,8 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     border-radius: 5px;
+    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт для кнопок */
+    font-size: 12px; /* Устанавливаем единый размер шрифта для кнопок */
 }
 
 #connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
@@ -120,24 +124,33 @@ h1 {
 
 #leaderboard {
     margin-top: 20px;
-    z-index: 10;
+    z-index: 10; /* Устанавливаем ниже, чем у #menu (z-index: 30) */
 }
 
 #leaderboard table {
     border-collapse: collapse;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
+    max-width: 600px; /* Ограничиваем ширину таблицы */
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт для таблицы */
 }
 
 #leaderboard th, #leaderboard td {
     border: 1px solid white;
-    padding: 5px;
+    padding: 3px; /* Уменьшенные отступы */
     text-align: center;
-    font-size: 14px;
+    font-size: 12px; /* Уменьшенный шрифт */
+    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт */
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 120px;
+    min-width: 80px; /* Уменьшенная ширина столбца */
+}
+
+#leaderboard tr {
+    line-height: 1.2; /* Уменьшенная высота строк */
 }
 
 .duck {
@@ -210,8 +223,9 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 250px;
-    z-index: 50;
+    margin-top: 230px;
+    z-index: 30;
+    position: relative; /* Гарантируем, что меню выше других элементов */
 }
 
 .menu-container {
@@ -259,13 +273,24 @@ h1 {
     cursor: pointer;
     color: white;
     text-shadow: 1px 1px 2px black;
+    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт для кнопки закрытия */
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
-    #leaderboard table { font-size: 12px; }
+    #leaderboard table {
+        font-size: 10px;
+        max-width: 500px;
+    }
+    #leaderboard th, #leaderboard td {
+        padding: 2px;
+        font-family: 'Press Start 2P', sans-serif; /* Единый шрифт */
+    }
+    #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
+        min-width: 60px;
+    }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
 }
@@ -273,7 +298,17 @@ h1 {
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
     #game-info { top: 10px; font-size: 8px; }
-    #leaderboard table { font-size: 10px; }
+    #leaderboard table {
+        font-size: 8px;
+        max-width: 400px;
+    }
+    #leaderboard th, #leaderboard td {
+        padding: 1px;
+        font-family: 'Press Start 2P', sans-serif; /* Единый шрифт */
+    }
+    #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
+        min-width: 50px;
+    }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
 }
