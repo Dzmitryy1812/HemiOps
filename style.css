@@ -3,6 +3,7 @@ html, body {
     margin: 0px;
     padding: 0px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 body {
@@ -11,11 +12,12 @@ body {
     background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
     background-size: cover;
     cursor: crosshair;
-    overflow: hidden;
+    overflow-x: hidden; /* Отключаем только горизонтальную прокрутку */
+    overflow-y: visible; /* Разрешаем вертикальную видимость для футера */
     transition: background 0.5s;
-    position: relative; /* Для правильного позиционирования футера */
+    position: relative; /* Для размещения футера */
     min-height: 100vh; /* Убедимся, что тело занимает всю высоту */
-    padding-bottom: 60px; /* Отступ снизу для футера */
+    padding-bottom: 80px; /* Увеличиваем отступ снизу для футера */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -44,7 +46,7 @@ body.level-5 .duck a { width: 60px; height: 60px; }
 }
 
 h1, h2 {
-    position: absolute;
+    position: fixed; /* Фиксируем заголовок вверху */
     font-family: 'Press Start 2P', sans-serif;
     font-size: 24px;
     top: 0px;
@@ -53,13 +55,15 @@ h1, h2 {
     padding: 5%;
     color: white;
     text-shadow: 2px 2px 4px black;
+    margin: 0; /* Убираем внешние отступы */
 }
 
 h1 {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Только горизонтальное центрирование */
     margin-top: 30px;
+    z-index: 40; /* Выше всех элементов */
 }
 
 .logo {
@@ -70,13 +74,17 @@ h1 {
 }
 
 #game-info {
+    display: none; /* Изначально скрываем на главном меню */
     position: absolute;
-    top: 50px;
+    top: 100px; /* Увеличиваем отступ сверху, чтобы не пересекаться с h1 */
     left: 10px;
     color: white;
     font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     z-index: 20;
+    text-align: left; /* Убедимся, что текст выровнен по левому краю */
+    margin: 0; /* Убираем возможные внешние отступы */
+    padding: 0; /* Убираем возможные внутренние отступы */
 }
 
 #connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
@@ -88,8 +96,8 @@ h1 {
     margin-bottom: 10px;
     display: block;
     width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0; /* Убираем auto-центрирование */
+    margin-right: 0;
     border-radius: 5px;
 }
 
@@ -212,7 +220,7 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 230px;
+    margin-top: 200px; /* Увеличиваем отступ для избежания наложения с заголовком */
     z-index: 30;
 }
 
@@ -266,13 +274,13 @@ h1 {
 /* Стили для футера */
 footer {
     position: absolute;
-    bottom: 10px;
+    bottom: 40px; /* Увеличиваем отступ снизу */
     left: 0;
     right: 0;
     text-align: center;
     color: white;
     font-family: 'Press Start 2P', sans-serif;
-    z-index: 20; /* Выше уток (z-index: 10) */
+    z-index: 40; /* Выше уток и других элементов */
 }
 
 .footer-text {
@@ -289,7 +297,7 @@ footer {
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
-    #game-info { top: 20px; font-size: 10px; }
+    #game-info { top: 80px; font-size: 10px; } /* Уменьшаем отступ сверху */
     #leaderboard table { font-size: 12px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
@@ -299,7 +307,7 @@ footer {
 
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
-    #game-info { top: 10px; font-size: 8px; }
+    #game-info { top: 60px; font-size: 8px; } /* Уменьшаем отступ сверху */
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
