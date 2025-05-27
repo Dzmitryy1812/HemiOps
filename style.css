@@ -7,6 +7,9 @@ html, body {
 
 body {
     background: linear-gradient(#ff6200, #ff8c00);
+    background-blend-mode: overlay;
+    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
+    background-size: cover;
     cursor: crosshair;
     overflow: hidden;
     transition: background 0.5s;
@@ -39,7 +42,8 @@ body.level-5 .duck a { width: 60px; height: 60px; }
 
 h1, h2 {
     position: absolute;
-    font-family: sans-serif;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 24px;
     top: 0px;
     left: 0px;
     right: 0px;
@@ -52,6 +56,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .logo {
@@ -66,12 +71,13 @@ h1 {
     top: 50px;
     left: 10px;
     color: white;
-    font-family: sans-serif;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
     z-index: 20;
 }
 
 #connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
-    background: #333;
+    background: linear-gradient(90deg, #ff6200, #1e90ff);
     color: white;
     border: none;
     padding: 10px;
@@ -81,10 +87,11 @@ h1 {
     width: 200px;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 5px;
 }
 
 #connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
-    background: #555;
+    background: linear-gradient(90deg, #ff4500, #1e90ff);
 }
 
 #mint-nft:disabled {
@@ -97,17 +104,19 @@ h1 {
     top: 10px;
     right: 10px;
     padding: 10px 20px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(30, 144, 255, 0.8);
+    border: 2px solid #ff6200;
     color: white;
     border-radius: 5px;
     z-index: 1000;
     display: none;
-    font-family: sans-serif;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
 }
 
 #notification.success { background: rgba(0, 128, 0, 0.8); }
 #notification.error { background: rgba(255, 0, 0, 0.8); }
-#notification.info { background: rgba(0, 0, 255, 0.8); }
+#notification.info { background: rgba(30, 144, 255, 0.8); }
 
 #leaderboard {
     margin-top: 20px;
@@ -197,6 +206,13 @@ h1 {
 }
 
 /* Стили для меню */
+#menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+    z-index: 30;
+}
+
 .menu-container {
     margin: auto;
     text-align: center;
@@ -204,6 +220,8 @@ h1 {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
 }
 
 /* Стили для модального окна */
@@ -221,14 +239,15 @@ h1 {
 }
 
 .modal-content {
-    background: #fff;
+    background: linear-gradient(#ff6200, #ff8c00);
     padding: 20px;
     border-radius: 10px;
     max-width: 500px;
     width: 90%;
     position: relative;
-    color: #333;
-    font-family: sans-serif;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
 }
 
 .close {
@@ -237,13 +256,14 @@ h1 {
     right: 10px;
     font-size: 24px;
     cursor: pointer;
-    color: #333;
+    color: white;
+    text-shadow: 1px 1px 2px black;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
-    #game-info { top: 20px; font-size: 14px; }
+    #game-info { top: 20px; font-size: 10px; }
     #leaderboard table { font-size: 12px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
@@ -251,7 +271,7 @@ h1 {
 
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
-    #game-info { top: 10px; font-size: 12px; }
+    #game-info { top: 10px; font-size: 8px; }
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
