@@ -1,518 +1,278 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('Page loaded:', new Date().toISOString());
-    let score = 0;
-    let level = 1;
-    let walletAddress = null;
-    let playerName = 'Player 1';
-    let contract = null;
-    let gameStarted = false;
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
 
-    const POINTS_TO_LEVEL_UP = {
-        1: 100,
-        2: 150,
-        3: 200,
-        4: 250,
-        5: 300
-    };
+body {
+    background: linear-gradient(#ff6200, #ff8c00);
+    background-blend-mode: overlay;
+    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
+    background-size: cover;
+    cursor: crosshair;
+    overflow: hidden;
+    transition: background 0.5s;
+}
 
-    const HEMI_CHAIN_ID = '0xa867';
-    const HEMI_NETWORK_PARAMS = {
-        chainId: '0xa867',
-        chainName: 'Hemi',
-        rpcUrls: ['https://rpc.hemi.network/rpc'],
-        nativeCurrency: {
-            name: 'Hemi',
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        blockExplorerUrls: ['https://explorer.hemi.xyz/'],
-    };
-    const contractAddress = '0x6892735450a27F206ADf4f969dFD29e6d3d7199F';
-    const contractABI = [
-        {
-            "anonymous": false,
-            "inputs": [
-                {"indexed": true, "internalType": "address", "name": "playerAddress", "type": "address"},
-                {"indexed": false, "internalType": "uint256", "name": "score", "type": "uint256"},
-                {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"}
-            ],
-            "name": "PlayerUpdated",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {"indexed": true, "internalType": "address", "name": "player", "type": "address"},
-                {"indexed": false, "internalType": "uint256", "name": "tokenId", "type": "uint256"},
-                {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"}
-            ],
-            "name": "NFTMinted",
-            "type": "event"
-        },
-        {
-            "inputs": [
-                {"internalType": "uint256", "name": "_score", "type": "uint256"},
-                {"internalType": "uint256", "name": "_level", "type": "uint256"}
-            ],
-            "name": "updatePlayer",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {"internalType": "uint256", "name": "_level", "type": "uint256"}
-            ],
-            "name": "mintLevelNFT",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "getLeaderboard",
-            "outputs": [
-                {
-                    "components": [
-                        {"internalType": "address", "name": "playerAddress", "type": "address"},
-                        {"internalType": "uint256", "name": "score", "type": "uint256"},
-                        {"internalType": "uint256", "name": "level", "type": "uint256"},
-                        {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"},
-                        {"internalType": "bool[]", "name": "levelsMinted", "type": "bool[]"}
-                    ],
-                    "internalType": "struct HemiShooter.Player[]",
-                    "name": "",
-                    "type": "tuple[]"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [{"internalType": "address", "name": "_player", "type": "address"}],
-            "name": "getPlayer",
-            "outputs": [
-                {
-                    "components": [
-                        {"internalType": "address", "name": "playerAddress", "type": "address"},
-                        {"internalType": "uint256", "name": "score", "type": "uint256"},
-                        {"internalType": "uint256", "name": "level", "type": "uint256"},
-                        {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"},
-                        {"internalType": "bool[]", "name": "levelsMinted", "type": "bool[]"}
-                    ],
-                    "internalType": "struct HemiShooter.Player",
-                    "name": "",
-                    "type": "tuple"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "getPlayerCount",
-            "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-            "name": "playerAddresses",
-            "outputs": [{"internalType": "address", "name": "", "type": "address"}],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [{"internalType": "address", "name": "", "type": "address"}],
-            "name": "players",
-            "outputs": [
-                {"internalType": "address", "name": "playerAddress", "type": "address"},
-                {"internalType": "uint256", "name": "score", "type": "uint256"},
-                {"internalType": "uint256", "name": "level", "type": "uint256"},
-                {"internalType": "uint256", "name": "lastUpdated", "type": "uint256"}
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}],
-            "name": "tokenURI",
-            "outputs": [{"internalType": "string", "name": "", "type": "string"}],
-            "stateMutability": "view",
-            "type": "function"
-        }
-    ];
+body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
+body.level-1 .duck { animation: fly 8s linear infinite; }
+body.level-1 .duck a { width: 100px; height: 100px; }
 
-    function showNotification(message, type = 'info') {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.className = type;
-        notification.style.display = 'block';
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 5000);
-    }
+body.level-2 { background: linear-gradient(#ff4500, #ff6347); }
+body.level-2 .duck { animation: fly 7s linear infinite; }
+body.level-2 .duck a { width: 90px; height: 90px; }
 
-    function isMetaMaskProvider() {
-        return window.ethereum && window.ethereum.isMetaMask;
-    }
+body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
+body.level-3 .duck { animation: fly 6s linear infinite; }
+body.level-3 .duck a { width: 80px; height: 80px; }
 
-    async function switchToHemiNetwork() {
-        console.log('Checking Hemi network:', new Date().toISOString());
-        try {
-            const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-            if (currentChainId !== HEMI_CHAIN_ID) {
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: HEMI_CHAIN_ID }],
-                    });
-                    console.log('Switched to Hemi network');
-                    showNotification('Switched to Hemi network', 'success');
-                } catch (switchError) {
-                    if (switchError.code === 4902) {
-                        await window.ethereum.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [HEMI_NETWORK_PARAMS],
-                        });
-                        console.log('Hemi network added');
-                        showNotification('Hemi network added', 'success');
-                    } else {
-                        throw switchError;
-                    }
-                }
-            } else {
-                console.log('Already on Hemi network');
-            }
-        } catch (error) {
-            console.error('Error switching to Hemi network:', error);
-            showNotification('Failed to switch to Hemi network', 'error');
-        }
-    }
+body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
+body.level-4 .duck { animation: fly 5s linear infinite; }
+body.level-4 .duck a { width: 70px; height: 70px; }
 
-    async function initContract() {
-        console.log('Initializing contract:', new Date().toISOString());
-        if (isMetaMaskProvider() && window.Web3) {
-            try {
-                const provider = new window.Web3(window.ethereum);
-                contract = new provider.eth.Contract(contractABI, contractAddress);
-                console.log('Contract successfully initialized:', contract);
-                showNotification('Contract successfully initialized', 'success');
-            } catch (error) {
-                console.error('Error initializing contract:', error);
-                showNotification('Error initializing contract', 'error');
-            }
-        } else {
-            console.log('MetaMask or Web3.js not available');
-            showNotification('MetaMask or Web3.js not available', 'error');
-        }
-    }
+body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
+body.level-5 .duck { animation: fly 4s linear infinite; }
+body.level-5 .duck a { width: 60px; height: 60px; }
 
-    async function checkMetaMaskStatus() {
-        if (isMetaMaskProvider()) {
-            try {
-                await switchToHemiNetwork();
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                console.log('MetaMask: connected accounts on load:', accounts);
-                window.ethereum.on('chainChanged', (chainId) => {
-                    console.log('MetaMask: chain changed to:', chainId);
-                    switchToHemiNetwork();
-                });
-                window.ethereum.on('accountsChanged', (accounts) => {
-                    console.log('MetaMask: account changed:', accounts);
-                    if (accounts.length > 0) {
-                        walletAddress = accounts[0];
-                        playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-                        document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                        console.log('Wallet updated:', walletAddress);
-                        showNotification('Wallet updated', 'success');
-                        document.getElementById('mint-nft').disabled = false;
-                        document.getElementById('connect-wallet').textContent = 'Disconnect';
-                    } else {
-                        walletAddress = null;
-                        document.getElementById('wallet').textContent = `Wallet: Not connected`;
-                        console.log('Wallet disconnected');
-                        showNotification('Wallet disconnected', 'info');
-                        document.getElementById('mint-nft').disabled = true;
-                        document.getElementById('connect-wallet').textContent = 'Connect Wallet';
-                        contract = null;
-                        clearLeaderboard();
-                    }
-                });
-            } catch (error) {
-                console.error('Error checking MetaMask:', error);
-                showNotification('Error checking MetaMask', 'error');
-            }
-        } else {
-            console.log('MetaMask not installed or not a trusted provider');
-            showNotification('Please use MetaMask', 'error');
-        }
-    }
-    checkMetaMaskStatus();
+.duck:active {
+    box-shadow: 0 0 20px 10px rgba(255, 165, 0, 0.5);
+    transition: box-shadow 0.3s;
+}
 
-    if (!window.Web3) {
-        console.log('Loading Web3.js...');
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js';
-        script.onload = () => {
-            if (window.Web3 && window.Web3.version && window.Web3.version.startsWith('1.')) {
-                console.log('Web3.js loaded, version:', window.Web3.version);
-                showNotification('Web3.js loaded successfully', 'success');
-            } else {
-                console.error('Incompatible Web3.js version');
-                showNotification('Incompatible Web3.js version', 'error');
-            }
-        };
-        script.onerror = () => {
-            console.error('Error loading Web3.js');
-            showNotification('Failed to load Web3.js', 'error');
-        };
-        document.head.appendChild(script);
-    } else {
-        console.log('Web3.js already available, version:', window.Web3.version);
-    }
+h1, h2 {
+    position: absolute;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 24px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 5%;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+}
 
-    document.querySelectorAll('.duck img').forEach(img => {
-        img.addEventListener('error', () => {
-            console.error('Failed to load image:', img.src);
-            showNotification('Failed to load duck image', 'error');
-        });
-        img.addEventListener('load', () => {
-            console.log('Image loaded:', img.src);
-        });
-    });
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
 
-    const ducks = document.querySelectorAll('.duck a');
-    console.log('Ducks found:', ducks.length);
+.logo {
+    width: 55px;
+    height: 55px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
 
-    function resetDucks() {
-        document.querySelectorAll('.duck').forEach(duck => {
-            duck.classList.remove('hidden');
-            duck.style.display = 'block';
-            console.log('Duck reset:', duck.id, 'Display:', getComputedStyle(duck).display);
-        });
-    }
+#game-info {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+    z-index: 20;
+}
 
-    ducks.forEach(duck => {
-        let hideTimeout;
-        duck.addEventListener('click', async (event) => {
-            event.preventDefault();
-            if (!gameStarted) {
-                console.log('Game not started, ignoring click');
-                return;
-            }
-            const targetDuck = event.currentTarget.parentElement;
-            console.log('Duck clicked:', targetDuck.id);
-            const isGolden = targetDuck.id === 'duck5';
-            const points = isGolden ? 50 : 10;
-            score += points;
-            document.getElementById('score').textContent = `Score: ${score}`;
-            clearTimeout(hideTimeout);
-            targetDuck.classList.add('hidden');
-            console.log('Hidden class added:', targetDuck.classList.contains('hidden'), 
-                        'Display:', getComputedStyle(targetDuck).display);
-            hideTimeout = setTimeout(() => {
-                targetDuck.classList.remove('hidden');
-                targetDuck.style.display = 'block';
-                console.log('Hidden class removed:', targetDuck.id, 
-                            'Display:', getComputedStyle(targetDuck).display);
-            }, 2000);
+#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
+    background: linear-gradient(90deg, #ff6200, #1e90ff);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
 
-            const pointsToLevelUp = POINTS_TO_LEVEL_UP[level];
-            if (score >= pointsToLevelUp) {
-                level++;
-                if (level > 5) level = 1;
-                document.getElementById('level').textContent = `Level: ${level}`;
-                document.body.className = `level-${level}`;
-                score = 0;
-                document.getElementById('score').textContent = `Score: ${score}`;
-                resetDucks();
-                console.log('Level up: contract=', contract, 'walletAddress=', walletAddress);
-                if (contract && walletAddress) {
-                    try {
-                        console.log('Sending request to smart contract: updatePlayer', { score, level, from: walletAddress });
-                        const result = await contract.methods.updatePlayer(score, level).send({ from: walletAddress });
-                        console.log('Leaderboard updated in smart contract:', result);
-                        showNotification('Player data updated on blockchain', 'success');
-                        await updateLeaderboard();
-                    } catch (error) {
-                        console.error('Smart contract update error:', error);
-                        showNotification('Error updating data in blockchain', 'error');
-                    }
-                } else {
-                    console.log('Smart contract request failed: contract or walletAddress missing');
-                    showNotification('Failed to update data: wallet or contract not connected', 'error');
-                }
-            }
-        });
-    });
+#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
+    background: linear-gradient(90deg, #ff4500, #1e90ff);
+}
 
-    const connectWalletButton = document.getElementById('connect-wallet');
-    if (connectWalletButton) {
-        connectWalletButton.addEventListener('click', async () => {
-            if (!walletAddress) {
-                console.log('Click on the Connect Wallet button!');
-                if (isMetaMaskProvider()) {
-                    try {
-                        await switchToHemiNetwork();
-                        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                        walletAddress = accounts[0];
-                        playerName = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-                        document.getElementById('wallet').textContent = `Wallet: ${playerName}`;
-                        console.log('Wallet connected:', walletAddress);
-                        showNotification('Wallet successfully connected', 'success');
-                        document.getElementById('connect-wallet').textContent = 'Disconnect';
-                        document.getElementById('mint-nft').disabled = false;
-                        await initContract();
-                        await updateLeaderboard();
-                    } catch (error) {
-                        console.error('Wallet connection error:', error);
-                        showNotification('Wallet connection error. Check MetaMask.', 'error');
-                    }
-                } else {
-                    console.log('MetaMask is not installed');
-                    showNotification('Install MetaMask to connect your wallet!', 'error');
-                }
-            } else {
-                walletAddress = null;
-                contract = null;
-                document.getElementById('wallet').textContent = 'Wallet: Not connected';
-                document.getElementById('connect-wallet').textContent = 'Connect Wallet';
-                document.getElementById('mint-nft').disabled = true;
-                clearLeaderboard();
-                showNotification('Wallet disconnected. To fully disconnect, also disconnect in MetaMask.', 'info');
-                console.log('Wallet disconnected');
-            }
-        });
-    }
+#mint-nft:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
 
-    function clearLeaderboard() {
-        const tbody = document.querySelector('#leaderboard tbody');
-        if (tbody) {
-            tbody.innerHTML = '';
-            console.log('Leaderboard cleared');
-        }
-    }
+#notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background: rgba(30, 144, 255, 0.8);
+    border: 2px solid #ff6200;
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
 
-    async function updateLeaderboard() {
-        if (contract) {
-            try {
-                console.log('Leaderboard update...');
-                const leaderboardData = await contract.methods.getLeaderboard().call();
-                const tbody = document.querySelector('#leaderboard tbody');
-                if (tbody) {
-                    tbody.innerHTML = '';
-                    leaderboardData.forEach(player => {
-                        if (player.playerAddress !== '0x0000000000000000000000000000000000000000') {
-                            const displayName = `${player.playerAddress.slice(0, 6)}...${player.playerAddress.slice(-4)}`;
-                            const lastUpdated = new Date(player.lastUpdated * 1000).toLocaleString();
-                            tbody.innerHTML += `<tr><td>${displayName}</td><td>${player.score}</td><td>${player.level}</td><td>${lastUpdated}</td></tr>`;
-                        }
-                    });
-                    console.log('Leaderboard updated:', leaderboardData);
-                    showNotification('Leaderboard successfully updated', 'success');
-                }
-            } catch (error) {
-                console.error('Error loading leaderboard:', error);
-                showNotification('Error loading leaderboard', 'error');
-            }
-        } else {
-            console.log('Leaderboard not updated: contract not initialized');
-            showNotification('Leaderboard not updated: contract not connected', 'error');
-        }
-    }
+#notification.success { background: rgba(0, 128, 0, 0.8); }
+#notification.error { background: rgba(255, 0, 0, 0.8); }
+#notification.info { background: rgba(30, 144, 255, 0.8); }
 
-    const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
-    if (refreshLeaderboardButton) {
-        refreshLeaderboardButton.addEventListener('click', updateLeaderboard);
-    }
+#leaderboard {
+    margin-top: 20px;
+}
 
-    const startGameButton = document.getElementById('start-game');
-    if (startGameButton) {
-        startGameButton.addEventListener('click', () => {
-            console.log('Starting game...');
-            document.getElementById('menu').style.display = 'none';
-            resetDucks();
-            gameStarted = true;
-        });
-    }
+#leaderboard table {
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
 
-    const howToPlayButton = document.getElementById('how-to-play');
-    const instructionsModal = document.getElementById('instructions-modal');
-    const closeInstructions = document.getElementById('close-instructions');
-    if (howToPlayButton) {
-        howToPlayButton.addEventListener('click', () => {
-            instructionsModal.style.display = 'flex';
-        });
-    }
-    if (closeInstructions) {
-        closeInstructions.addEventListener('click', () => {
-            instructionsModal.style.display = 'none';
-        });
-    }
+#leaderboard th, #leaderboard td {
+    border: 1px solid white;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+}
 
-    async function displayNFT(tokenId) {
-        try {
-            const tokenURI = await contract.methods.tokenURI(tokenId).call();
-            console.log('Token URI:', tokenURI);
-            const response = await fetch(tokenURI);
-            const metadata = await response.json();
-            console.log('NFT metadata:', metadata);
-            const nftContainer = document.getElementById('nft-container');
-            if (!nftContainer) {
-                const newContainer = document.createElement('div');
-                newContainer.id = 'nft-container';
-                newContainer.style.position = 'absolute';
-                newContainer.style.bottom = '10px';
-                newContainer.style.right = '10px';
-                newContainer.style.zIndex = '30';
-                document.body.appendChild(newContainer);
-            }
-            const img = document.createElement('img');
-            img.src = metadata.image;
-            img.alt = metadata.name;
-            img.style.maxWidth = '100px';
-            img.style.margin = '5px';
-            img.onerror = () => {
-                console.error('Failed to load NFT image:', metadata.image);
-                showNotification('Failed to load NFT image', 'error');
-            };
-            document.getElementById('nft-container').appendChild(img);
-            showNotification(`NFT ${metadata.name} displayed!`, 'success');
-        } catch (error) {
-            console.error('Error displaying NFT:', error);
-            showNotification('Error displaying NFT', 'error');
-        }
-    }
+#leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
+    min-width: 120px;
+}
 
-    const mintNFTButton = document.getElementById('mint-nft');
-    if (mintNFTButton) {
-        mintNFTButton.addEventListener('click', async () => {
-            if (!walletAddress || !contract) {
-                showNotification('Please connect your wallet first', 'error');
-                return;
-            }
+.duck {
+    position: absolute;
+    left: -150px;
+    right: 0px;
+    height: 0px;
+    border-radius: 100%;
+    z-index: 10;
+    transform: translateZ(0);
+    animation: fly 8s linear infinite;
+    pointer-events: auto;
+    display: block;
+}
 
-            try {
-                const playerData = await contract.methods.getPlayer(walletAddress).call();
-                const currentLevel = playerData.level;
-                if (currentLevel < 1 || currentLevel > 5) {
-                    showNotification('Invalid level to mint NFT', 'error');
-                    return;
-                }
+.duck a {
+    display: block;
+    cursor: crosshair;
+    transition: all 0.6s;
+    width: 100px;
+    height: 100px;
+    animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
+    pointer-events: auto;
+}
 
-                console.log('Minting NFT for level:', currentLevel);
-                const result = await contract.methods.mintLevelNFT(currentLevel).send({ from: walletAddress });
-                console.log('NFT minted:', result);
-                showNotification(`NFT for level ${currentLevel} successfully minted!`, 'success');
-                
-                // Извлекаем tokenId из событий транзакции
-                const tokenId = result.events.NFTMinted.returnValues.tokenId;
-                await displayNFT(tokenId);
-            } catch (error) {
-                console.error('Error minting NFT:', error);
-                showNotification('Error minting NFT. Check MetaMask.', 'error');
-            }
-        });
-    }
-});
+.duck a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+#duck5 a img {
+    border: 2px solid gold;
+    border-radius: 50%;
+    box-shadow: 0 0 10px gold;
+}
+
+.duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
+.duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
+.duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
+.duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
+.duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
+.duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
+
+@keyframes fly {
+    0% { transform: translateX(0px); }
+    100% { transform: translateX(100vw); }
+}
+
+@keyframes float {
+    0% { transform: translateY(40%); }
+    50% { transform: translateY(-40%); }
+    100% { transform: translateY(40%); }
+}
+
+.duck.hidden,
+.duck.hidden a,
+.duck.hidden img {
+    display: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+/* Стили для меню */
+#menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 230px;
+    z-index: 30;
+}
+
+.menu-container {
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(#ff6200, #ff8c00);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .duck a { width: 80px; height: 80px; }
+    #game-info { top: 20px; font-size: 10px; }
+    #leaderboard table { font-size: 12px; }
+    .menu-container { padding: 15px; }
+    .modal-content { padding: 15px; }
+}
+
+@media (max-width: 600px) {
+    .duck a { width: 60px; height: 60px; }
+    #game-info { top: 10px; font-size: 8px; }
+    #leaderboard table { font-size: 10px; }
+    .menu-container { padding: 10px; }
+    .modal-content { padding: 10px; }
+}
