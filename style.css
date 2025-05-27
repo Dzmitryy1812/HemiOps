@@ -89,6 +89,7 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     border-radius: 5px;
+    font-family: 'Press Start 2P', sans-serif;
 }
 
 #connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
