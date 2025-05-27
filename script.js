@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     const contractAddress = '0x6892735450a27F206ADf4f969dFD29e6d3d7199F';
     const contractABI = [
-        // (Оставляем без изменений, так как не затрагивается)
+        // (Оставляем без изменений)
     ];
 
     function showNotification(message, type = 'info') {
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     leaderboardData.forEach(player => {
                         if (player.playerAddress !== '0x0000000000000000000000000000000000000000') {
                             const displayName = `${player.playerAddress.slice(0, 6)}...${player.playerAddress.slice(-4)}`;
-                            const lastUpdated = new Date(player.lastUpdated * 1000).toLocaleDateString(); // Сокращаем до даты
+                            const lastUpdated = new Date(player.lastUpdated * 1000).toLocaleDateString();
                             tbody.innerHTML += `<tr><td>${displayName}</td><td>${player.score}</td><td>${player.level}</td><td>${lastUpdated}</td></tr>`;
                         }
                     });
@@ -308,18 +308,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (startGameButton) {
         startGameButton.addEventListener('click', () => {
             console.log('Starting game...');
-            // Скрываем все элементы, кроме указанных в #game-info
             document.getElementById('menu').style.display = 'none';
             document.getElementById('leaderboard').style.display = 'none';
             document.getElementById('refresh-leaderboard').style.display = 'none';
             document.getElementById('game-info').querySelectorAll('br, #connect-wallet').forEach(el => el.style.display = 'none');
-            // Показываем уток
             document.querySelectorAll('.duck').forEach(duck => {
                 duck.style.display = 'block';
                 console.log('Duck displayed:', duck.id, 'Display:', getComputedStyle(duck).display);
             });
             gameStarted = true;
-            // Показываем кнопку Exit
             document.getElementById('exit-game').style.display = 'block';
         });
     }
@@ -328,14 +325,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (exitGameButton) {
         exitGameButton.addEventListener('click', () => {
             console.log('Exiting game...');
-            // Возвращаем исходное состояние
             document.getElementById('menu').style.display = 'flex';
             document.getElementById('leaderboard').style.display = 'block';
             document.getElementById('refresh-leaderboard').style.display = 'block';
             document.getElementById('game-info').querySelectorAll('br, #connect-wallet').forEach(el => el.style.display = 'inline');
             document.querySelectorAll('.duck').forEach(duck => {
                 duck.style.display = 'none';
-                duck.classList.remove('hidden'); // Убираем скрытие уток
+                duck.classList.remove('hidden');
             });
             gameStarted = false;
             document.getElementById('exit-game').style.display = 'none';
