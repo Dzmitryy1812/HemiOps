@@ -13,10 +13,11 @@ body {
     background-size: cover;
     cursor: crosshair;
     overflow-x: hidden; /* Отключаем только горизонтальную прокрутку */
+    overflow-y: visible; /* Разрешаем вертикальную видимость для футера */
     transition: background 0.5s;
     position: relative; /* Для размещения футера */
     min-height: 100vh; /* Убедимся, что тело занимает всю высоту */
-    padding-bottom: 70px; /* Увеличиваем отступ снизу для футера */
+    padding-bottom: 80px; /* Увеличиваем отступ снизу для футера */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -73,6 +74,7 @@ h1 {
 }
 
 #game-info {
+    display: none; /* Изначально скрываем на главном меню */
     position: absolute;
     top: 100px; /* Увеличиваем отступ сверху, чтобы не пересекаться с h1 */
     left: 10px;
@@ -272,13 +274,13 @@ h1 {
 /* Стили для футера */
 footer {
     position: absolute;
-    bottom: 30px; /* Ещё больше увеличиваем отступ снизу */
+    bottom: 40px; /* Увеличиваем отступ снизу */
     left: 0;
     right: 0;
     text-align: center;
     color: white;
     font-family: 'Press Start 2P', sans-serif;
-    z-index: 30; /* Выше уток и других элементов */
+    z-index: 40; /* Выше уток и других элементов */
 }
 
 .footer-text {
