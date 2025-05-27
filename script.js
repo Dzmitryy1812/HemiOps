@@ -133,6 +133,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             ],
             "stateMutability": "view",
             "type": "function"
+        },
+        {
+            "inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}],
+            "name": "tokenURI",
+            "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+            "stateMutability": "view",
+            "type": "function"
         }
     ];
 
@@ -287,7 +294,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     ducks.forEach(duck => {
-        let hideTimeout; // Локальный таймер для каждой утки
+        let hideTimeout;
         duck.addEventListener('click', async (event) => {
             event.preventDefault();
             if (!gameStarted) {
@@ -319,7 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.body.className = `level-${level}`;
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
-                resetDucks(); // Сбрасываем все утки при повышении уровня
+                resetDucks();
                 console.log('Level up: contract=', contract, 'walletAddress=', walletAddress);
                 if (contract && walletAddress) {
                     try {
@@ -425,7 +432,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         startGameButton.addEventListener('click', () => {
             console.log('Starting game...');
             document.getElementById('menu').style.display = 'none';
-            resetDucks(); // Сбрасываем утки при старте игры
+            resetDucks();
             gameStarted = true;
         });
     }
@@ -442,6 +449,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         closeInstructions.addEventListener('click', () => {
             instructionsModal.style.display = 'none';
         });
+    }
+
+    async function displayNFT(tokenId) {
+        try {
+            const tokenURI = await contract.methods.tokenURI(tokenId).call();
+            console.log('Token URI:', tokenURI);
+            const response = await fetch(tokenURI);
+            const metadata = await response.json();
+            console.log('NFT metadata:', metadata);
+            const nftContainer = document.getElementById('nft-container');
+            if (!nftContainer) {
+                const newContainer = document.createElement('div');
+                newContainer.id = 'nft-container';
+                newContainer.style.position = 'absolute';
+                newContainer.style.bottom = '10px';
+                newContainer.style.right = '10px';
+                newContainer.style.zIndex = '30';
+                document.body.appendChild(newContainer);
+            }
+            const img = document.createElement('img');
+            img.src = metadata.image;
+            img.alt = metadata.name;
+            img.style.maxWidth = '100px';
+            img.style.margin = '5px';
+            img.onerror = () => {
+                console.error('Failed to load NFT image:', metadata.image);
+                showNotification('Failed to load NFT image', 'error');
+            };
+            document.getElementById('nft-container').appendChild(img);
+            showNotification(`NFT ${metadata.name} displayed!`, 'success');
+        } catch (error) {
+            console.error('Error displaying NFT:', error);
+            showNotification('Error displaying NFT', 'error');
+        }
     }
 
     const mintNFTButton = document.getElementById('mint-nft');
@@ -464,6 +505,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const result = await contract.methods.mintLevelNFT(currentLevel).send({ from: walletAddress });
                 console.log('NFT minted:', result);
                 showNotification(`NFT for level ${currentLevel} successfully minted!`, 'success');
+                
+                // Извлекаем tokenId из событий транзакции
+                const tokenId = result.events.NFTMinted.returnValues.tokenId;
+                await displayNFT(tokenId);
             } catch (error) {
                 console.error('Error minting NFT:', error);
                 showNotification('Error minting NFT. Check MetaMask.', 'error');
