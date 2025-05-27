@@ -52,7 +52,7 @@ h1, h2 {
     padding: 5%;
     color: white;
     text-shadow: 2px 2px 4px black;
-    z-index: 20; /* Устанавливаем выше, чем у #leaderboard */
+    z-index: 20;
 }
 
 h1 {
@@ -79,7 +79,7 @@ h1 {
     z-index: 20;
 }
 
-#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
+#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft, #exit-game {
     background: linear-gradient(90deg, #ff6200, #1e90ff);
     color: white;
     border: none;
@@ -95,7 +95,7 @@ h1 {
     font-size: 12px;
 }
 
-#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
+#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled), #exit-game:hover {
     background: linear-gradient(90deg, #ff4500, #1e90ff);
 }
 
@@ -124,19 +124,19 @@ h1 {
 #notification.info { background: rgba(30, 144, 255, 0.8); }
 
 #leaderboard {
-    position: absolute; /* Фиксируем позицию */
-    top: 350px; /* Перемещаем ниже меню */
+    position: absolute;
+    top: 350px;
     left: 50%;
-    transform: translateX(-50%); /* Центрируем */
+    transform: translateX(-50%);
     margin-top: 20px;
-    z-index: 10; /* Ниже, чем у #menu */
+    z-index: 10;
 }
 
 #leaderboard table {
     border-collapse: collapse;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-    max-width: 300px; /* Уже уменьшено */
+    max-width: 400px; /* Увеличено с 300px до 400px */
     width: 100%;
     margin: 0 auto;
     font-family: 'Press Start 2P', sans-serif;
@@ -144,18 +144,18 @@ h1 {
 
 #leaderboard th, #leaderboard td {
     border: 1px solid white;
-    padding: 1px;
+    padding: 2px; /* Увеличено с 1px до 2px */
     text-align: center;
-    font-size: 6px;
+    font-size: 10px; /* Увеличено с 6px до 10px */
     font-family: 'Press Start 2P', sans-serif;
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 40px;
+    min-width: 60px; /* Увеличено с 40px до 60px */
 }
 
 #leaderboard tr {
-    line-height: 1.0;
+    line-height: 1.2; /* Увеличено с 1.0 до 1.2 */
 }
 
 .duck {
@@ -226,11 +226,11 @@ h1 {
 
 /* Стили для меню */
 #menu {
-    position: fixed; /* Фиксируем меню в центре */
+    position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Центрируем по горизонтали и вертикали */
-    z-index: 30; /* Выше, чем у #leaderboard */
+    transform: translate(-50%, -50%);
+    z-index: 30;
 }
 
 .menu-container {
@@ -242,6 +242,14 @@ h1 {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
+}
+
+#game-exit {
+    display: none; /* Скрыто по умолчанию, будет отображаться после Start */
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 40;
 }
 
 /* Стили для модального окна */
@@ -286,18 +294,18 @@ h1 {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
     #leaderboard {
-        top: 300px; /* Сдвигаем ниже на меньших экранах */
+        top: 300px;
     }
     #leaderboard table {
-        font-size: 5px;
-        max-width: 250px;
+        font-size: 8px;
+        max-width: 350px;
     }
     #leaderboard th, #leaderboard td {
-        padding: 1px;
+        padding: 2px;
         font-family: 'Press Start 2P', sans-serif;
     }
     #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 30px;
+        min-width: 50px;
     }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
@@ -307,18 +315,18 @@ h1 {
     .duck a { width: 60px; height: 60px; }
     #game-info { top: 10px; font-size: 8px; }
     #leaderboard {
-        top: 250px; /* Ещё ниже на маленьких экранах */
+        top: 250px;
     }
     #leaderboard table {
-        font-size: 4px;
-        max-width: 200px;
+        font-size: 6px;
+        max-width: 300px;
     }
     #leaderboard th, #leaderboard td {
-        padding: 0.5px;
+        padding: 1px;
         font-family: 'Press Start 2P', sans-serif;
     }
     #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 25px;
+        min-width: 40px;
     }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
