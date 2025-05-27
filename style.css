@@ -12,7 +12,7 @@ html, body {
 body {
     background: linear-gradient(#ff6200, #ff8c00);
     background-blend-mode: overlay;
-    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
+    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Water texture */
     background-size: cover;
     cursor: crosshair;
     overflow: hidden;
@@ -24,19 +24,19 @@ body.level-1 .duck { animation: fly 8s linear infinite; }
 body.level-1 .duck a { width: 100px; height: 100px; }
 
 body.level-2 { background: linear-gradient(#ff4500, #ff6347); }
-body.level-2 .duck { animation: fly 7s linear infinite; }
+body.level-2 .duck { animation: fly 6s linear infinite; }
 body.level-2 .duck a { width: 90px; height: 90px; }
 
 body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
-body.level-3 .duck { animation: fly 6s linear infinite; }
+body.level-3 .duck { animation: fly 4.5s linear infinite; }
 body.level-3 .duck a { width: 80px; height: 80px; }
 
 body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
-body.level-4 .duck { animation: fly 5s linear infinite; }
+body.level-4 .duck { animation: fly 3.5s linear infinite; }
 body.level-4 .duck a { width: 70px; height: 70px; }
 
 body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
-body.level-5 .duck { animation: fly 4s linear infinite; }
+body.level-5 .duck { animation: fly 2.5s linear infinite; }
 body.level-5 .duck a { width: 60px; height: 60px; }
 
 .duck:active {
@@ -140,6 +140,20 @@ h1 {
     min-width: 120px;
 }
 
+#nft-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 30;
+}
+
+#nft-container img {
+    max-width: 100px;
+    margin: 5px;
+    border: 2px solid #ff6200;
+    border-radius: 5px;
+}
+
 .duck {
     position: absolute;
     left: -150px;
@@ -206,7 +220,7 @@ h1 {
     transform: none !important;
 }
 
-/* Стили для меню */
+/* Menu styles */
 #menu {
     display: flex;
     justify-content: center;
@@ -224,7 +238,7 @@ h1 {
     font-size: 12px;
 }
 
-/* Стили для модального окна */
+/* Modal styles */
 .modal {
     position: fixed;
     top: 0;
@@ -259,13 +273,14 @@ h1 {
     text-shadow: 1px 1px 2px black;
 }
 
-/* Адаптивность */
+/* Responsive design */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
     #leaderboard table { font-size: 12px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
+    #nft-container img { max-width: 80px; }
 }
 
 @media (max-width: 600px) {
@@ -274,4 +289,5 @@ h1 {
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
+    #nft-container img { max-width: 60px; }
 }
