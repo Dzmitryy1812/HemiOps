@@ -52,6 +52,7 @@ h1, h2 {
     padding: 5%;
     color: white;
     text-shadow: 2px 2px 4px black;
+    z-index: 20; /* Устанавливаем выше, чем у #leaderboard */
 }
 
 h1 {
@@ -123,15 +124,19 @@ h1 {
 #notification.info { background: rgba(30, 144, 255, 0.8); }
 
 #leaderboard {
+    position: absolute; /* Фиксируем позицию */
+    top: 350px; /* Перемещаем ниже меню */
+    left: 50%;
+    transform: translateX(-50%); /* Центрируем */
     margin-top: 20px;
-    z-index: 10; /* Ниже, чем у #menu (z-index: 30) */
+    z-index: 10; /* Ниже, чем у #menu */
 }
 
 #leaderboard table {
     border-collapse: collapse;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-    max-width: 350px; /* Уменьшено с 600px до 300px */
+    max-width: 300px; /* Уже уменьшено */
     width: 100%;
     margin: 0 auto;
     font-family: 'Press Start 2P', sans-serif;
@@ -139,18 +144,18 @@ h1 {
 
 #leaderboard th, #leaderboard td {
     border: 1px solid white;
-    padding: 1px; /* Уменьшено с 3px до 1px */
+    padding: 1px;
     text-align: center;
-    font-size: 6px; /* Уменьшено с 12px до 6px */
+    font-size: 6px;
     font-family: 'Press Start 2P', sans-serif;
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 40px; /* Уменьшено с 80px до 40px */
+    min-width: 40px;
 }
 
 #leaderboard tr {
-    line-height: 1.0; /* Уменьшено с 1.2 до 1.0 */
+    line-height: 1.0;
 }
 
 .duck {
@@ -221,11 +226,11 @@ h1 {
 
 /* Стили для меню */
 #menu {
-    display: flex;
-    justify-content: center;
-    margin-top: 230px;
+    position: fixed; /* Фиксируем меню в центре */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрируем по горизонтали и вертикали */
     z-index: 30; /* Выше, чем у #leaderboard */
-    position: relative; /* Гарантируем приоритет в слоях */
 }
 
 .menu-container {
@@ -280,16 +285,19 @@ h1 {
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
+    #leaderboard {
+        top: 300px; /* Сдвигаем ниже на меньших экранах */
+    }
     #leaderboard table {
-        font-size: 7px; /* Уменьшено с 10px до 5px */
-        max-width: 250px; /* Уменьшено с 500px до 250px */
+        font-size: 5px;
+        max-width: 250px;
     }
     #leaderboard th, #leaderboard td {
         padding: 1px;
         font-family: 'Press Start 2P', sans-serif;
     }
     #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 30px; /* Уменьшено с 60px до 30px */
+        min-width: 30px;
     }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
@@ -298,16 +306,19 @@ h1 {
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
     #game-info { top: 10px; font-size: 8px; }
+    #leaderboard {
+        top: 250px; /* Ещё ниже на маленьких экранах */
+    }
     #leaderboard table {
-        font-size: 4px; /* Уменьшено с 8px до 4px */
-        max-width: 200px; /* Уменьшено с 400px до 200px */
+        font-size: 4px;
+        max-width: 200px;
     }
     #leaderboard th, #leaderboard td {
-        padding: 0.5px; /* Ещё меньше отступов */
+        padding: 0.5px;
         font-family: 'Press Start 2P', sans-serif;
     }
     #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 25px; /* Уменьшено с 50px до 25px */
+        min-width: 25px;
     }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
