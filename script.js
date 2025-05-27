@@ -407,11 +407,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const refreshLeaderboardButton = document.getElementById('refresh-leaderboard');
-    if (refreshLeaderboardButton) {
-        refreshLeaderboardButton.addEventListener('click', updateLeaderboard);
-    }
-
+  
     const startGameButton = document.getElementById('start-game');
     if (startGameButton) {
         startGameButton.addEventListener('click', () => {
