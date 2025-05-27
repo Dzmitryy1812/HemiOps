@@ -8,10 +8,9 @@ html, body {
 }
 
 body {
-    background: linear-gradient(#ff6200, #ff8c00); /* Возвращаем оранжевый градиент */
+    background: linear-gradient(#ff6200, #ff8c00);
     background-blend-mode: overlay;
-    /* Убираем текстуру, если она недоступна, или заменяем на локальный файл */
-    background-image: none; /* Убрали https://www.transparenttextures.com/patterns/water.png */
+    background-image: none;
     background-size: cover;
     cursor: crosshair;
     overflow: hidden;
@@ -169,7 +168,7 @@ h1 {
     transform: translateZ(0);
     animation: fly 8s linear infinite;
     pointer-events: auto;
-    display: none; /* Скрываем уток по умолчанию */
+    display: none;
 }
 
 .duck a {
@@ -225,7 +224,6 @@ h1 {
     transform: none !important;
 }
 
-/* Стили для меню */
 #menu {
     position: fixed;
     top: 50%;
@@ -253,7 +251,6 @@ h1 {
     z-index: 40;
 }
 
-/* Стили для модального окна */
 .modal {
     position: fixed;
     top: 0;
@@ -290,13 +287,10 @@ h1 {
     font-family: 'Press Start 2P', sans-serif;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
-    #leaderboard {
-        top: 300px;
-    }
+    #leaderboard { top: 300px; }
     #leaderboard table {
         font-size: 8px;
         max-width: 350px;
@@ -315,9 +309,7 @@ h1 {
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
     #game-info { top: 10px; font-size: 8px; }
-    #leaderboard {
-        top: 250px;
-    }
+    #leaderboard { top: 250px; }
     #leaderboard table {
         font-size: 6px;
         max-width: 300px;
