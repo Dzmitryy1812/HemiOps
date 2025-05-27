@@ -132,13 +132,13 @@ h1 {
 
 #leaderboard th, #leaderboard td {
     border: 1px solid white;
-    padding: 5px;
+    padding: 2px;
     text-align: center;
-    font-size: 14px;
+    font-size: 10px;
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 120px;
+    min-width: 80px;
 }
 
 .duck {
