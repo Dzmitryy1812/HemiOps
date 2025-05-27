@@ -13,6 +13,9 @@ body {
     cursor: crosshair;
     overflow: hidden;
     transition: background 0.5s;
+    position: relative; /* Для правильного позиционирования футера */
+    min-height: 100vh; /* Убедимся, что тело занимает всю высоту */
+    padding-bottom: 60px; /* Отступ снизу для футера */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -40,19 +43,19 @@ body.level-5 .duck a { width: 60px; height: 60px; }
     transition: box-shadow 0.3s;
 }
 
-h1, h2 {
-    position: absolute;
+h1, h2, p, th, td, #game-info div, #notification, .footer-text, .footer-year, .close, .menu-container, #leaderboard button {
     font-family: 'Press Start 2P', sans-serif;
-    font-size: 24px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    padding: 5%;
+    font-size: 12px;
     color: white;
     text-shadow: 2px 2px 4px black;
 }
 
 h1 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,6 +91,9 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     border-radius: 5px;
+    font-family: 'Press Start 2P', sans-serif; /* Единый стиль для кнопок */
+    font-size: 12px;
+    text-shadow: 2px 2px 4px black;
 }
 
 #connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
@@ -110,8 +116,6 @@ h1 {
     border-radius: 5px;
     z-index: 1000;
     display: none;
-    font-family: 'Press Start 2P', sans-serif;
-    font-size: 12px;
 }
 
 #notification.success { background: rgba(0, 128, 0, 0.8); }
@@ -132,7 +136,7 @@ h1 {
     border: 1px solid white;
     padding: 5px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px; /* Единый размер */
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
@@ -220,8 +224,10 @@ h1 {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    font-family: 'Press Start 2P', sans-serif;
+    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
     font-size: 12px;
+    color: white;
+    text-shadow: 2px 2px 4px black;
 }
 
 /* Стили для модального окна */
@@ -246,8 +252,9 @@ h1 {
     width: 90%;
     position: relative;
     color: white;
-    font-family: 'Press Start 2P', sans-serif;
+    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
     font-size: 12px;
+    text-shadow: 2px 2px 4px black;
 }
 
 .close {
@@ -260,19 +267,46 @@ h1 {
     text-shadow: 1px 1px 2px black;
 }
 
+/* Стили для футера */
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif; /* Единый стиль */
+    font-size: 12px;
+    text-shadow: 2px 2px 4px black;
+    z-index: 20; /* Выше уток (z-index: 10) */
+}
+
+.footer-text {
+    font-size: 12px; /* Единый размер */
+}
+
+.footer-year {
+    font-size: 12px; /* Единый размер */
+    margin-top: 5px; /* Отступ между строками */
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
     #game-info { top: 20px; font-size: 10px; }
-    #leaderboard table { font-size: 12px; }
+    #leaderboard table { font-size: 10px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
+    .footer-text { font-size: 9px; }
+    .footer-year { font-size: 9px; }
 }
 
 @media (max-width: 600px) {
     .duck a { width: 60px; height: 60px; }
     #game-info { top: 10px; font-size: 8px; }
-    #leaderboard table { font-size: 10px; }
+    #leaderboard table { font-size: 8px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
+    .footer-text { font-size: 7px; }
+    .footer-year { font-size: 7px; }
 }
