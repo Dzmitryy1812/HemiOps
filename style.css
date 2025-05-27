@@ -211,7 +211,7 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 200px; /* Увеличиваем отступ для избежания наложения с заголовком */
+    margin-top: 250px; /* Увеличиваем отступ для избежания наложения с заголовком */
     z-index: 30;
 }
 
@@ -271,8 +271,18 @@ footer {
     text-align: center;
     color: white;
     font-family: 'Press Start 2P', sans-serif;
+    z-index: 20; /* Убедимся, что футер выше уток */
+}
+
+.footer-text {
     font-size: 12px;
     text-shadow: 1px 1px 2px black;
+}
+
+.footer-year {
+    font-size: 10px;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 5px; /* Отступ между строками */
 }
 
 /* Адаптивность */
@@ -282,7 +292,8 @@ footer {
     #leaderboard table { font-size: 12px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
-    footer { font-size: 9px; } /* Уменьшаем шрифт для длинного текста */
+    .footer-text { font-size: 9px; }
+    .footer-year { font-size: 8px; }
 }
 
 @media (max-width: 600px) {
@@ -291,5 +302,6 @@ footer {
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
-    footer { font-size: 7px; } /* Ещё меньше для маленьких экранов */
+    .footer-text { font-size: 7px; }
+    .footer-year { font-size: 6px; }
 }
