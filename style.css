@@ -77,7 +77,7 @@ h1 {
     z-index: 20;
 }
 
-#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
+#connect-wallet, #start-game, #how-to-play, #mint-nft {
     background: linear-gradient(90deg, #ff6200, #1e90ff);
     color: white;
     border: none;
