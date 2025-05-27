@@ -4,13 +4,14 @@ html, body {
     margin: 0px;
     padding: 0px;
     width: 100%;
-    font-family: 'Press Start 2P', sans-serif; /* Единый шрифт */
+    font-family: 'Press Start 2P', sans-serif;
 }
 
 body {
-    background: linear-gradient(#ff6200, #ff8c00);
+    background: linear-gradient(#ff6200, #ff8c00); /* Возвращаем оранжевый градиент */
     background-blend-mode: overlay;
-    background-image: url('https://www.transparenttextures.com/patterns/water.png');
+    /* Убираем текстуру, если она недоступна, или заменяем на локальный файл */
+    background-image: none; /* Убрали https://www.transparenttextures.com/patterns/water.png */
     background-size: cover;
     cursor: crosshair;
     overflow: hidden;
@@ -136,7 +137,7 @@ h1 {
     border-collapse: collapse;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-    max-width: 400px; /* Увеличено с 300px до 400px */
+    max-width: 400px;
     width: 100%;
     margin: 0 auto;
     font-family: 'Press Start 2P', sans-serif;
@@ -144,18 +145,18 @@ h1 {
 
 #leaderboard th, #leaderboard td {
     border: 1px solid white;
-    padding: 2px; /* Увеличено с 1px до 2px */
+    padding: 2px;
     text-align: center;
-    font-size: 10px; /* Увеличено с 6px до 10px */
+    font-size: 10px;
     font-family: 'Press Start 2P', sans-serif;
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 60px; /* Увеличено с 40px до 60px */
+    min-width: 60px;
 }
 
 #leaderboard tr {
-    line-height: 1.2; /* Увеличено с 1.0 до 1.2 */
+    line-height: 1.2;
 }
 
 .duck {
@@ -168,7 +169,7 @@ h1 {
     transform: translateZ(0);
     animation: fly 8s linear infinite;
     pointer-events: auto;
-    display: block;
+    display: none; /* Скрываем уток по умолчанию */
 }
 
 .duck a {
@@ -190,144 +191,4 @@ h1 {
 
 #duck5 a img {
     border: 2px solid gold;
-    border-radius: 50%;
-    box-shadow: 0 0 10px gold;
-}
-
-.duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
-.duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
-.duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
-.duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
-.duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
-.duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
-.duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
-.duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
-.duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
-.duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
-
-@keyframes fly {
-    0% { transform: translateX(0px); }
-    100% { transform: translateX(100vw); }
-}
-
-@keyframes float {
-    0% { transform: translateY(40%); }
-    50% { transform: translateY(-40%); }
-    100% { transform: translateY(40%); }
-}
-
-.duck.hidden,
-.duck.hidden a,
-.duck.hidden img {
-    display: none !important;
-    animation: none !important;
-    transform: none !important;
-}
-
-/* Стили для меню */
-#menu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 30;
-}
-
-.menu-container {
-    margin: auto;
-    text-align: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    font-family: 'Press Start 2P', sans-serif;
-    font-size: 12px;
-}
-
-#game-exit {
-    display: none; /* Скрыто по умолчанию, будет отображаться после Start */
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 40;
-}
-
-/* Стили для модального окна */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: linear-gradient(#ff6200, #ff8c00);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 90%;
-    position: relative;
-    color: white;
-    font-family: 'Press Start 2P', sans-serif;
-    font-size: 12px;
-}
-
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    color: white;
-    text-shadow: 1px 1px 2px black;
-    font-family: 'Press Start 2P', sans-serif;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .duck a { width: 80px; height: 80px; }
-    #game-info { top: 20px; font-size: 10px; }
-    #leaderboard {
-        top: 300px;
-    }
-    #leaderboard table {
-        font-size: 8px;
-        max-width: 350px;
-    }
-    #leaderboard th, #leaderboard td {
-        padding: 2px;
-        font-family: 'Press Start 2P', sans-serif;
-    }
-    #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 50px;
-    }
-    .menu-container { padding: 15px; }
-    .modal-content { padding: 15px; }
-}
-
-@media (max-width: 600px) {
-    .duck a { width: 60px; height: 60px; }
-    #game-info { top: 10px; font-size: 8px; }
-    #leaderboard {
-        top: 250px;
-    }
-    #leaderboard table {
-        font-size: 6px;
-        max-width: 300px;
-    }
-    #leaderboard th, #leaderboard td {
-        padding: 1px;
-        font-family: 'Press Start 2P', sans-serif;
-    }
-    #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-        min-width: 40px;
-    }
-    .menu-container { padding: 10px; }
-    .modal-content { padding: 10px; }
-}
+    border-radius:
