@@ -8,62 +8,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body class="level-1">
-    <!-- Заголовок с эмблемой -->
     <h1>
-        <img src="logo.png" alt="HemiOps Logo" class="logo">
+        <img src="https://hemiops.com/assets/logo.png" alt="HemiOps Logo" class="logo">
         HemiOps
     </h1>
 
-    <!-- Меню -->
-    <div id="menu">
-        <div class="menu-container">
-            <button id="start-game">Start Game</button>
-            <button id="how-to-play">How to Play</button>
-            <button id="mint-nft" disabled>Mint NFT</button>
-        </div>
+    <div id="menu" class="menu-container">
+        <button id="start-game">Start Game</button>
+        <button id="how-to-play">How to Play</button>
+        <button id="mint-nft" disabled>Mint NFT</button>
     </div>
 
-    <!-- Модальное окно с инструкциями -->
+    <div id="leaderboard" class="menu-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Points</th>
+                    <th>Level</th>
+                    <th>Last update</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
     <div id="instructions-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span id="close-instructions" class="close">×</span>
-            <p>Click on the ducks to earn points!</p>
-            <p>- Regular ducks: 10 points</p>
-            <p>- Golden duck: 50 points</p>
-            <p>Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!</p>
+            <span id="close-instructions" class="close">&times;</span>
+            <p>
+                Click on the ducks to earn points!<br><br>
+                - Regular ducks: 10 points<br>
+                - Golden duck: 50 points<br><br>
+                Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!
+            </p>
         </div>
     </div>
 
-    <!-- Игровое поле -->
     <div id="game-info">
+        <div id="notification"></div>
         <button id="connect-wallet">Connect Wallet</button>
         <div id="wallet">Wallet: Not connected</div>
         <div id="score">Score: 0</div>
         <div id="level">Level: 1</div>
-        <div id="leaderboard">
-            <button id="refresh-leaderboard">Update</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Points</th>
-                        <th>Level</th>
-                        <th>Last update</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
     </div>
 
-    <div id="notification"></div>
-
-    <!-- Утки -->
-    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
-    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
-    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
-    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
-    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
+    <div class="duck" id="duck1"><a href="#"><img src="https://hemiops.com/assets/duck.png" alt="Duck"></a></div>
+    <div class="duck" id="duck2"><a href="#"><img src="https://hemiops.com/assets/duck.png" alt="Duck"></a></div>
+    <div class="duck" id="duck3"><a href="#"><img src="https://hemiops.com/assets/duck.png" alt="Duck"></a></div>
+    <div class="duck" id="duck4"><a href="#"><img src="https://hemiops.com/assets/duck.png" alt="Duck"></a></div>
+    <div class="duck" id="duck5"><a href="#"><img src="https://hemiops.com/assets/golden-duck.png" alt="Golden Duck"></a></div>
 
     <script src="script.js"></script>
 </body>
