@@ -272,6 +272,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Web3.js already available, version:', window.Web3.version);
     }
 
+    // Hide ducks on page load
+    document.querySelectorAll('.duck').forEach(duck => {
+        duck.style.display = 'none';
+        console.log('Duck hidden on load:', duck.id);
+    });
+
     document.querySelectorAll('.duck img').forEach(img => {
         img.addEventListener('error', () => {
             console.error('Failed to load image:', img.src);
