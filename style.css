@@ -138,7 +138,7 @@ h1 {
 }
 
 #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
-    min-width: 80px;
+    min-width: 70px;
 }
 
 .duck {
