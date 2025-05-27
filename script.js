@@ -165,10 +165,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.duck img').forEach(img => {
         img.addEventListener('error', () => {
             console.error('Failed to load image:', img.src);
-            showNotification('Ошибка загрузки изображения утки', 'error');
+            showNotification('Ошибка загрузки изображения мишени', 'error');
         });
         img.addEventListener('load', () => {
-            console.log('Image loaded:', img.src);
+            console.log('Image loaded successfully:', img.src);
         });
     });
 
