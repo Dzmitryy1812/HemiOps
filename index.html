@@ -1,76 +1,307 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HemiOps</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body class="level-1">
-    <!-- Заголовок с эмблемой -->
-    <h1>
-        <img src="logo.png" alt="HemiOps Logo" class="logo">
-        HemiOps
-    </h1>
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
 
-    <!-- Меню -->
-    <div id="menu">
-        <div class="menu-container">
-            <button id="start-game">Start Game</button>
-            <button id="how-to-play">How to Play</button>
-            <button id="mint-nft" disabled>Mint NFT</button>
-        </div>
-    </div>
+body {
+    background: linear-gradient(#ff6200, #ff8c00);
+    background-blend-mode: overlay;
+    background-image: url('https://www.transparenttextures.com/patterns/water.png'); /* Текстура воды */
+    background-size: cover;
+    cursor: crosshair;
+    overflow: hidden;
+    transition: background 0.5s;
+    position: relative; /* Для размещения футера */
+    min-height: 100%; /* Убедимся, что тело занимает всю высоту */
+}
 
-    <!-- Модальное окно с инструкциями -->
-    <div id="instructions-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span id="close-instructions" class="close">×</span>
-            <p>Click on the ducks to earn points!</p>
-            <p>- Regular ducks: 10 points</p>
-            <p>- Golden duck: 50 points</p>
-            <p>Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!</p>
-        </div>
-    </div>
+body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
+body.level-1 .duck { animation: fly 8s linear infinite; }
+body.level-1 .duck a { width: 100px; height: 100px; }
 
-    <!-- Игровое поле -->
-    <div id="game-info">
-        <button id="connect-wallet">Connect Wallet</button>
-        <div id="wallet">Wallet: Not connected</div>
-        <div id="score">Score: 0</div>
-        <div id="level">Level: 1</div>
-        <div id="leaderboard">
-            <button id="refresh-leaderboard">Update</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Points</th>
-                        <th>Level</th>
-                        <th>Last update</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+body.level-2 { background: linear-gradient(#ff4500, #ff6347); }
+body.level-2 .duck { animation: fly 7s linear infinite; }
+body.level-2 .duck a { width: 90px; height: 90px; }
 
-    <div id="notification"></div>
+body.level-3 { background: linear-gradient(#ff1493, #ff69b4); }
+body.level-3 .duck { animation: fly 6s linear infinite; }
+body.level-3 .duck a { width: 80px; height: 80px; }
 
-    <!-- Утки -->
-    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
-    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
-    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
-    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
-    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
+body.level-4 { background: linear-gradient(#8a2be2, #9370db); }
+body.level-4 .duck { animation: fly 5s linear infinite; }
+body.level-4 .duck a { width: 70px; height: 70px; }
 
-    <script src="script.js"></script>
+body.level-5 { background: linear-gradient(#4b0082, #6a5acd); }
+body.level-5 .duck { animation: fly 4s linear infinite; }
+body.level-5 .duck a { width: 60px; height: 60px; }
 
-    <!-- Футер -->
-    <footer>
-        <div class="footer-text">Made on Hemi Network</div>
-        <div class="footer-year">2025</div>
-    </footer>
-</body>
-</html>
+.duck:active {
+    box-shadow: 0 0 20px 10px rgba(255, 165, 0, 0.5);
+    transition: box-shadow 0.3s;
+}
+
+h1, h2 {
+    position: absolute;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 24px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 5%;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.logo {
+    width: 55px;
+    height: 55px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#game-info {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+    z-index: 20;
+}
+
+#connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
+    background: linear-gradient(90deg, #ff6200, #1e90ff);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
+
+#connect-wallet:hover, #refresh-leaderboard:hover, #start-game:hover, #how-to-play:hover, #mint-nft:hover:not(:disabled) {
+    background: linear-gradient(90deg, #ff4500, #1e90ff);
+}
+
+#mint-nft:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
+
+#notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background: rgba(30, 144, 255, 0.8);
+    border: 2px solid #ff6200;
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
+
+#notification.success { background: rgba(0, 128, 0, 0.8); }
+#notification.error { background: rgba(255, 0, 0, 0.8); }
+#notification.info { background: rgba(30, 144, 255, 0.8); }
+
+#leaderboard {
+    margin-top: 20px;
+}
+
+#leaderboard table {
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+#leaderboard th, #leaderboard td {
+    border: 1px solid white;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#leaderboard th:nth-child(4), #leaderboard td:nth-child(4) {
+    min-width: 120px;
+}
+
+.duck {
+    position: absolute;
+    left: -150px;
+    right: 0px;
+    height: 0px;
+    border-radius: 100%;
+    z-index: 10;
+    transform: translateZ(0);
+    animation: fly 8s linear infinite;
+    pointer-events: auto;
+    display: block;
+}
+
+.duck a {
+    display: block;
+    cursor: crosshair;
+    transition: all 0.6s;
+    width: 100px;
+    height: 100px;
+    animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92);
+    pointer-events: auto;
+}
+
+.duck a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+#duck5 a img {
+    border: 2px solid gold;
+    border-radius: 50%;
+    box-shadow: 0 0 10px gold;
+}
+
+.duck#duck1 { top: 10%; animation: fly 8s 0.1s linear infinite; }
+.duck#duck1 a { animation: float 1.6s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck2 { top: 25%; animation: fly 10s 0.2s linear infinite; }
+.duck#duck2 a { animation: float 1.7s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck3 { top: 40%; animation: fly 9s 0.3s linear infinite; }
+.duck#duck3 a { animation: float 1.8s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck4 { top: 55%; animation: fly 11s 0.4s linear infinite; }
+.duck#duck4 a { animation: float 1.9s infinite cubic-bezier(.58,.14,.46,.92); }
+.duck#duck5 { top: 70%; animation: fly 7s 0.5s linear infinite; }
+.duck#duck5 a { animation: float 2.0s infinite cubic-bezier(.58,.14,.46,.92); }
+
+@keyframes fly {
+    0% { transform: translateX(0px); }
+    100% { transform: translateX(100vw); }
+}
+
+@keyframes float {
+    0% { transform: translateY(40%); }
+    50% { transform: translateY(-40%); }
+    100% { transform: translateY(40%); }
+}
+
+.duck.hidden,
+.duck.hidden a,
+.duck.hidden img {
+    display: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+/* Стили для меню */
+#menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 250px; /* Увеличиваем отступ для избежания наложения с заголовком */
+    z-index: 30;
+}
+
+.menu-container {
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(#ff6200, #ff8c00);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 12px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+/* Стили для футера */
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    z-index: 20; /* Убедимся, что футер выше уток */
+}
+
+.footer-text {
+    font-size: 12px;
+    text-shadow: 1px 1px 2px black;
+}
+
+.footer-year {
+    font-size: 10px;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 5px; /* Отступ между строками */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .duck a { width: 80px; height: 80px; }
+    #game-info { top: 20px; font-size: 10px; }
+    #leaderboard table { font-size: 12px; }
+    .menu-container { padding: 15px; }
+    .modal-content { padding: 15px; }
+    .footer-text { font-size: 9px; }
+    .footer-year { font-size: 8px; }
+}
+
+@media (max-width: 600px) {
+    .duck a { width: 60px; height: 60px; }
+    #game-info { top: 10px; font-size: 8px; }
+    #leaderboard table { font-size: 10px; }
+    .menu-container { padding: 10px; }
+    .modal-content { padding: 10px; }
+    .footer-text { font-size: 7px; }
+    .footer-year { font-size: 6px; }
+}
