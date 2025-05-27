@@ -15,6 +15,7 @@ body {
     transition: background 0.5s;
     position: relative; /* Для размещения футера */
     min-height: 100%; /* Убедимся, что тело занимает всю высоту */
+    padding-bottom: 50px; /* Отступ снизу для футера */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -57,7 +58,7 @@ h1, h2 {
 h1 {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Только горизонтальное центрирование */
     margin-top: 30px;
 }
 
@@ -76,6 +77,7 @@ h1 {
     font-family: 'Press Start 2P', sans-serif;
     font-size: 12px;
     z-index: 20;
+    text-align: left; /* Убедимся, что текст выровнен по левому краю */
 }
 
 #connect-wallet, #refresh-leaderboard, #start-game, #how-to-play, #mint-nft {
@@ -87,8 +89,8 @@ h1 {
     margin-bottom: 10px;
     display: block;
     width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0; /* Убираем auto-центрирование */
+    margin-right: 0;
     border-radius: 5px;
 }
 
@@ -211,7 +213,7 @@ h1 {
 #menu {
     display: flex;
     justify-content: center;
-    margin-top: 250px; /* Увеличиваем отступ для избежания наложения с заголовком */
+    margin-top: 200px; /* Увеличиваем отступ для избежания наложения с заголовком */
     z-index: 30;
 }
 
@@ -265,13 +267,13 @@ h1 {
 /* Стили для футера */
 footer {
     position: absolute;
-    bottom: 10px;
+    bottom: 20px; /* Увеличиваем отступ снизу */
     left: 0;
     right: 0;
     text-align: center;
     color: white;
     font-family: 'Press Start 2P', sans-serif;
-    z-index: 20; /* Убедимся, что футер выше уток */
+    z-index: 30; /* Выше уток и других элементов */
 }
 
 .footer-text {
