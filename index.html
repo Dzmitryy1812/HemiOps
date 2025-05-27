@@ -1,46 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HemiOps</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="level-1">
+    <!-- Заголовок с эмблемой -->
     <h1>
-        <img src="logo.png" alt="Logo" class="logo">HemiOps
+        <img src="logo.png" alt="HemiOps Logo" class="logo">
+        HemiOps
     </h1>
 
-    <div id="game-info">
-        Connect Wallet
-        <button id="connect-wallet">Disconnect</button>
-        Wallet: 0x2c54...9c0f<br>
-        Score: 0<br>
-        Level: 1
-    </div>
-
-    <div id="leaderboard">
-        <button id="refresh-leaderboard">Update</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Points</th>
-                    <th>Level</th>
-                    <th>Last update</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>0x2c54...9c0f</td>
-                    <td>0</td>
-                    <td>4</td>
-                    <td>27.05.2025, 14:58:59</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
+    <!-- Меню -->
     <div id="menu">
         <div class="menu-container">
             <button id="start-game">Start Game</button>
@@ -49,29 +23,48 @@
         </div>
     </div>
 
-    <div id="instructions-modal" class="modal">
+    <!-- Модальное окно с инструкциями -->
+    <div id="instructions-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span id="close-instructions" class="close">×</span>
-            Click on the ducks to earn points!<br>
-            - Regular ducks: 10 points<br>
-            - Golden duck: 50 points<br>
-            Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!
+            <p>Click on the ducks to earn points!</p>
+            <p>- Regular ducks: 10 points</p>
+            <p>- Golden duck: 50 points</p>
+            <p>Reach the required points to advance to the next level. There are 5 levels with increasing difficulty. Connect your wallet to save your progress and mint an NFT for each level you complete!</p>
         </div>
     </div>
 
-    <div id="game-exit">
-        <button id="exit-game">Exit</button>
+    <!-- Игровое поле -->
+    <div id="game-info">
+        <button id="connect-wallet">Connect Wallet</button>
+        <div id="wallet">Wallet: Not connected</div>
+        <div id="score">Score: 0</div>
+        <div id="level">Level: 1</div>
+        <div id="leaderboard">
+            <button id="refresh-leaderboard">Update</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Points</th>
+                        <th>Level</th>
+                        <th>Last update</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="duck" id="duck1"><a href="#"><img src="images/target1.png" alt="Target 1"></a></div>
-    <div class="duck" id="duck2"><a href="#"><img src="images/target2.png" alt="Target 2"></a></div>
-    <div class="duck" id="duck3"><a href="#"><img src="images/target3.png" alt="Target 3"></a></div>
-    <div class="duck" id="duck4"><a href="#"><img src="images/target4.png" alt="Target 4"></a></div>
-    <div class="duck" id="duck5"><a href="#"><img src="images/target_golden.png" alt="Golden Target"></a></div>
 
     <div id="notification"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <!-- Утки -->
+    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
+    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
+    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
+    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
+    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
+
     <script src="script.js"></script>
 </body>
 </html>
