@@ -13,6 +13,9 @@ body {
     cursor: crosshair;
     overflow: hidden;
     transition: background 0.5s;
+    position: relative; /* Для правильного позиционирования футера */
+    min-height: 100vh; /* Убедимся, что тело занимает всю высоту */
+    padding-bottom: 60px; /* Отступ снизу для футера */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
@@ -260,6 +263,29 @@ h1 {
     text-shadow: 1px 1px 2px black;
 }
 
+/* Стили для футера */
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    z-index: 20; /* Выше уток (z-index: 10) */
+}
+
+.footer-text {
+    font-size: 12px;
+    text-shadow: 1px 1px 2px black;
+}
+
+.footer-year {
+    font-size: 10px;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 5px; /* Отступ между строками */
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .duck a { width: 80px; height: 80px; }
@@ -267,6 +293,8 @@ h1 {
     #leaderboard table { font-size: 12px; }
     .menu-container { padding: 15px; }
     .modal-content { padding: 15px; }
+    .footer-text { font-size: 9px; }
+    .footer-year { font-size: 8px; }
 }
 
 @media (max-width: 600px) {
@@ -275,4 +303,6 @@ h1 {
     #leaderboard table { font-size: 10px; }
     .menu-container { padding: 10px; }
     .modal-content { padding: 10px; }
+    .footer-text { font-size: 7px; }
+    .footer-year { font-size: 6px; }
 }
