@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Player 1';
     let contract = null;
     let gameStarted = false;
-    let hideTimeout;
 
     const POINTS_TO_LEVEL_UP = {
         1: 100,
@@ -229,8 +228,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         showNotification('Wallet disconnected', 'info');
                         document.getElementById('mint-nft').disabled = true;
                         document.getElementById('connect-wallet').textContent = 'Connect Wallet';
-                        contract = null; // Сбрасываем контракт
-                        clearLeaderboard(); // Очищаем лидерборд
+                        contract = null;
+                        clearLeaderboard();
                     }
                 });
             } catch (error) {
@@ -269,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.duck img').forEach(img => {
         img.addEventListener('error', () => {
             console.error('Failed to load image:', img.src);
-            showNotification('Ошибка загрузки изображения утки', 'error');
+            showNotification('Failed to load duck image', 'error');
         });
         img.addEventListener('load', () => {
             console.log('Image loaded:', img.src);
@@ -279,7 +278,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ducks = document.querySelectorAll('.duck a');
     console.log('Ducks found:', ducks.length);
 
+    function resetDucks() {
+        document.querySelectorAll('.duck').forEach(duck => {
+            duck.classList.remove('hidden');
+            duck.style.display = 'block';
+            console.log('Duck reset:', duck.id, 'Display:', getComputedStyle(duck).display);
+        });
+    }
+
     ducks.forEach(duck => {
+        let hideTimeout; // Локальный таймер для каждой утки
         duck.addEventListener('click', async (event) => {
             event.preventDefault();
             if (!gameStarted) {
@@ -298,6 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         'Display:', getComputedStyle(targetDuck).display);
             hideTimeout = setTimeout(() => {
                 targetDuck.classList.remove('hidden');
+                targetDuck.style.display = 'block';
                 console.log('Hidden class removed:', targetDuck.id, 
                             'Display:', getComputedStyle(targetDuck).display);
             }, 2000);
@@ -310,6 +319,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.body.className = `level-${level}`;
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
+                resetDucks(); // Сбрасываем все утки при повышении уровня
                 console.log('Level up: contract=', contract, 'walletAddress=', walletAddress);
                 if (contract && walletAddress) {
                     try {
@@ -334,7 +344,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
             if (!walletAddress) {
-                // Подключение кошелька
                 console.log('Click on the Connect Wallet button!');
                 if (isMetaMaskProvider()) {
                     try {
@@ -358,13 +367,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showNotification('Install MetaMask to connect your wallet!', 'error');
                 }
             } else {
-                // Отключение кошелька
                 walletAddress = null;
-                contract = null; // Сбрасываем контракт
+                contract = null;
                 document.getElementById('wallet').textContent = 'Wallet: Not connected';
                 document.getElementById('connect-wallet').textContent = 'Connect Wallet';
                 document.getElementById('mint-nft').disabled = true;
-                clearLeaderboard(); // Очищаем лидерборд
+                clearLeaderboard();
                 showNotification('Wallet disconnected. To fully disconnect, also disconnect in MetaMask.', 'info');
                 console.log('Wallet disconnected');
             }
@@ -417,10 +425,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         startGameButton.addEventListener('click', () => {
             console.log('Starting game...');
             document.getElementById('menu').style.display = 'none';
-            document.querySelectorAll('.duck').forEach(duck => {
-                duck.style.display = 'block';
-                console.log('Duck displayed:', duck.id, 'Display:', getComputedStyle(duck).display);
-            });
+            resetDucks(); // Сбрасываем утки при старте игры
             gameStarted = true;
         });
     }
