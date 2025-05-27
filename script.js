@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let playerName = 'Player 1';
     let contract = null;
     let gameStarted = false;
+    let hideTimeout;
 
     const POINTS_TO_LEVEL_UP = {
         1: 100,
@@ -133,13 +134,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             ],
             "stateMutability": "view",
             "type": "function"
-        },
-        {
-            "inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}],
-            "name": "tokenURI",
-            "outputs": [{"internalType": "string", "name": "", "type": "string"}],
-            "stateMutability": "view",
-            "type": "function"
         }
     ];
 
@@ -235,8 +229,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         showNotification('Wallet disconnected', 'info');
                         document.getElementById('mint-nft').disabled = true;
                         document.getElementById('connect-wallet').textContent = 'Connect Wallet';
-                        contract = null;
-                        clearLeaderboard();
+                        contract = null; // Сбрасываем контракт
+                        clearLeaderboard(); // Очищаем лидерборд
                     }
                 });
             } catch (error) {
@@ -272,16 +266,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Web3.js already available, version:', window.Web3.version);
     }
 
-    // Hide ducks on page load
-    document.querySelectorAll('.duck').forEach(duck => {
-        duck.style.display = 'none';
-        console.log('Duck hidden on load:', duck.id);
-    });
-
     document.querySelectorAll('.duck img').forEach(img => {
         img.addEventListener('error', () => {
             console.error('Failed to load image:', img.src);
-            showNotification('Failed to load duck image', 'error');
+            showNotification('Ошибка загрузки изображения утки', 'error');
         });
         img.addEventListener('load', () => {
             console.log('Image loaded:', img.src);
@@ -291,16 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ducks = document.querySelectorAll('.duck a');
     console.log('Ducks found:', ducks.length);
 
-    function resetDucks() {
-        document.querySelectorAll('.duck').forEach(duck => {
-            duck.classList.remove('hidden');
-            duck.style.display = 'block';
-            console.log('Duck reset:', duck.id, 'Display:', getComputedStyle(duck).display);
-        });
-    }
-
     ducks.forEach(duck => {
-        let hideTimeout;
         duck.addEventListener('click', async (event) => {
             event.preventDefault();
             if (!gameStarted) {
@@ -319,7 +298,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         'Display:', getComputedStyle(targetDuck).display);
             hideTimeout = setTimeout(() => {
                 targetDuck.classList.remove('hidden');
-                targetDuck.style.display = 'block';
                 console.log('Hidden class removed:', targetDuck.id, 
                             'Display:', getComputedStyle(targetDuck).display);
             }, 2000);
@@ -332,7 +310,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.body.className = `level-${level}`;
                 score = 0;
                 document.getElementById('score').textContent = `Score: ${score}`;
-                resetDucks();
                 console.log('Level up: contract=', contract, 'walletAddress=', walletAddress);
                 if (contract && walletAddress) {
                     try {
@@ -357,6 +334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (connectWalletButton) {
         connectWalletButton.addEventListener('click', async () => {
             if (!walletAddress) {
+                // Подключение кошелька
                 console.log('Click on the Connect Wallet button!');
                 if (isMetaMaskProvider()) {
                     try {
@@ -380,12 +358,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showNotification('Install MetaMask to connect your wallet!', 'error');
                 }
             } else {
+                // Отключение кошелька
                 walletAddress = null;
-                contract = null;
+                contract = null; // Сбрасываем контракт
                 document.getElementById('wallet').textContent = 'Wallet: Not connected';
                 document.getElementById('connect-wallet').textContent = 'Connect Wallet';
                 document.getElementById('mint-nft').disabled = true;
-                clearLeaderboard();
+                clearLeaderboard(); // Очищаем лидерборд
                 showNotification('Wallet disconnected. To fully disconnect, also disconnect in MetaMask.', 'info');
                 console.log('Wallet disconnected');
             }
@@ -438,7 +417,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         startGameButton.addEventListener('click', () => {
             console.log('Starting game...');
             document.getElementById('menu').style.display = 'none';
-            resetDucks();
+            document.querySelectorAll('.duck').forEach(duck => {
+                duck.style.display = 'block';
+                console.log('Duck displayed:', duck.id, 'Display:', getComputedStyle(duck).display);
+            });
             gameStarted = true;
         });
     }
@@ -455,40 +437,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         closeInstructions.addEventListener('click', () => {
             instructionsModal.style.display = 'none';
         });
-    }
-
-    async function displayNFT(tokenId) {
-        try {
-            const tokenURI = await contract.methods.tokenURI(tokenId).call();
-            console.log('Token URI:', tokenURI);
-            const response = await fetch(tokenURI);
-            const metadata = await response.json();
-            console.log('NFT metadata:', metadata);
-            const nftContainer = document.getElementById('nft-container');
-            if (!nftContainer) {
-                const newContainer = document.createElement('div');
-                newContainer.id = 'nft-container';
-                newContainer.style.position = 'absolute';
-                newContainer.style.bottom = '10px';
-                newContainer.style.right = '10px';
-                newContainer.style.zIndex = '30';
-                document.body.appendChild(newContainer);
-            }
-            const img = document.createElement('img');
-            img.src = metadata.image;
-            img.alt = metadata.name;
-            img.style.maxWidth = '100px';
-            img.style.margin = '5px';
-            img.onerror = () => {
-                console.error('Failed to load NFT image:', metadata.image);
-                showNotification('Failed to load NFT image', 'error');
-            };
-            document.getElementById('nft-container').appendChild(img);
-            showNotification(`NFT ${metadata.name} displayed!`, 'success');
-        } catch (error) {
-            console.error('Error displaying NFT:', error);
-            showNotification('Error displaying NFT', 'error');
-        }
     }
 
     const mintNFTButton = document.getElementById('mint-nft');
@@ -511,10 +459,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const result = await contract.methods.mintLevelNFT(currentLevel).send({ from: walletAddress });
                 console.log('NFT minted:', result);
                 showNotification(`NFT for level ${currentLevel} successfully minted!`, 'success');
-                
-                // Извлекаем tokenId из событий транзакции
-                const tokenId = result.events.NFTMinted.returnValues.tokenId;
-                await displayNFT(tokenId);
             } catch (error) {
                 console.error('Error minting NFT:', error);
                 showNotification('Error minting NFT. Check MetaMask.', 'error');
