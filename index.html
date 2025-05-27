@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HemiOps</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="level-1">
-    <!-- Заголовок с эмблемой -->
     <h1>
-        <img src="logo.png" alt="HemiOps Logo" class="logo">
+        <img src="hemi-logo.png" alt="Hemi Logo" class="logo">
         HemiOps
     </h1>
 
-    <!-- Меню -->
     <div id="menu">
         <div class="menu-container">
             <button id="start-game">Start Game</button>
@@ -23,7 +21,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно с инструкциями -->
     <div id="instructions-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span id="close-instructions" class="close">×</span>
@@ -34,12 +31,11 @@
         </div>
     </div>
 
-    <!-- Игровое поле -->
     <div id="game-info">
         <button id="connect-wallet">Connect Wallet</button>
-        <div id="wallet">Wallet: Not connected</div>
-        <div id="score">Score: 0</div>
-        <div id="level">Level: 1</div>
+        <p id="wallet">Wallet: Not connected</p>
+        <p id="score">Score: 0</p>
+        <p id="level">Level: 1</p>
         <div id="leaderboard">
             <button id="refresh-leaderboard">Update</button>
             <table>
@@ -57,13 +53,13 @@
     </div>
 
     <div id="notification"></div>
+    <div id="nft-container" style="position: absolute; bottom: 10px; right: 10px; z-index: 30;"></div>
 
-    <!-- Утки -->
-    <div class="duck" id="duck1" style="display: none;"><a href="#"><img src="target1.png" alt="Duck"></a></div>
-    <div class="duck" id="duck2" style="display: none;"><a href="#"><img src="target2.png" alt="Duck"></a></div>
-    <div class="duck" id="duck3" style="display: none;"><a href="#"><img src="target3.png" alt="Duck"></a></div>
-    <div class="duck" id="duck4" style="display: none;"><a href="#"><img src="target4.png" alt="Duck"></a></div>
-    <div class="duck" id="duck5" style="display: none;"><a href="#"><img src="target_golden.png" alt="Golden Duck"></a></div>
+    <div class="duck" id="duck1"><a href="#"><img src="target1.png" alt="Duck 1"></a></div>
+    <div class="duck" id="duck2"><a href="#"><img src="target2.png" alt="Duck 2"></a></div>
+    <div class="duck" id="duck3"><a href="#"><img src="target3.png" alt="Duck 3"></a></div>
+    <div class="duck" id="duck4"><a href="#"><img src="target4.png" alt="Duck 4"></a></div>
+    <div class="duck" id="duck5"><a href="#"><img src="target5.png" alt="Duck 5"></a></div>
 
     <script src="script.js"></script>
 </body>
