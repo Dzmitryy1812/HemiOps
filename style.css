@@ -13,6 +13,7 @@ body {
     cursor: crosshair;
     overflow: hidden;
     transition: background 0.5s;
+    font-family: 'Press Start 2P', sans-serif; /* Добавлено для единообразия шрифта */
 }
 
 body.level-1 { background: linear-gradient(#ff6200, #ff8c00); }
